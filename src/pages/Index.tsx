@@ -1,62 +1,69 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Home, Building2, Car, ArrowRight, Search, UserCheck, MessageSquare, Shield, Users, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import {
+  Home, Building2, Car, ArrowRight, Search, UserCheck, MessageSquare,
+  Shield, Users, TrendingUp, Briefcase, ShoppingBag, Wrench, Star,
+  Quote, CheckCircle, Zap, Globe,
+} from "lucide-react";
 import heroIllustration from "@/assets/hero-illustration.png";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { mockProfiles } from "@/data/mockProfiles";
 
 const categories = [
-  {
-    title: "Kiralık Ev Arayanlar",
-    description: "Bütçe, konum ve ev tercihleriyle kiracı profilleri",
-    icon: Home,
-    to: "/ara/kiralik-ev",
-    count: 2847,
-  },
-  {
-    title: "Satılık Ev Arayanlar",
-    description: "Hayalindeki evi tarif eden alıcı profilleri",
-    icon: Building2,
-    to: "/ara/satilik-ev",
-    count: 1523,
-  },
-  {
-    title: "Araç Arayanlar",
-    description: "Araç tipi, bütçe ve marka tercihli alıcı profilleri",
-    icon: Car,
-    to: "/ara/arac",
-    count: 3291,
-  },
+  { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", count: 2847 },
+  { title: "Satılık Ev", description: "Alıcı profilleri ve kriterleri", icon: Building2, to: "/ara/satilik-ev", count: 1523 },
+  { title: "Araç", description: "Araç alıcı talepleri", icon: Car, to: "/ara/arac", count: 3291 },
+  { title: "İş Arayanlar", description: "Profesyonel CV'ler", icon: Briefcase, to: "/ara/is-ariyorum", count: 4120 },
+  { title: "İkinci El", description: "İkinci el eşya talepleri", icon: ShoppingBag, to: "/ara/ikinci-el", count: 1890 },
+  { title: "Hizmet", description: "Hizmet talepleri", icon: Wrench, to: "/ara/hizmet", count: 2340 },
 ];
 
 const steps = [
-  {
-    step: "1",
-    title: "Profilini Oluştur",
-    description: "Ne aradığını, bütçeni ve kişisel bilgilerini içeren CV'ni oluştur.",
-    icon: Users,
-  },
-  {
-    step: "2",
-    title: "İlanını Yayınla",
-    description: "Profilini yayınla ve satıcı/ev sahiplerinin seni bulmasını bekle.",
-    icon: Search,
-  },
-  {
-    step: "3",
-    title: "Teklif Al",
-    description: "Kriterlerine uyan satıcılar sana ulaşsın, tekliflerini değerlendir.",
-    icon: MessageSquare,
-  },
+  { step: "1", title: "Profilini Oluştur", description: "Ne aradığını, bütçeni ve kişisel bilgilerini içeren CV'ni oluştur.", icon: Users },
+  { step: "2", title: "İlanını Yayınla", description: "Profilini yayınla ve satıcı/ev sahiplerinin seni bulmasını bekle.", icon: Search },
+  { step: "3", title: "Teklif Al", description: "Kriterlerine uyan satıcılar sana ulaşsın, tekliflerini değerlendir.", icon: MessageSquare },
 ];
 
 const stats = [
-  { value: "7.600+", label: "Aktif Profil" },
-  { value: "15.000+", label: "Başarılı Eşleşme" },
-  { value: "50+", label: "Şehir" },
-  { value: "%94", label: "Memnuniyet" },
+  { value: "12.000+", label: "Aktif Profil" },
+  { value: "25.000+", label: "Başarılı Eşleşme" },
+  { value: "81", label: "Şehir" },
+  { value: "%96", label: "Memnuniyet" },
 ];
+
+const testimonials = [
+  {
+    name: "Mehmet K.",
+    role: "Ev Sahibi",
+    text: "Kiracı bulmak hiç bu kadar kolay olmamıştı. Profilleri inceledim, en uygun kiracıyı seçtim. 2 günde anlaştık.",
+    rating: 5,
+  },
+  {
+    name: "Aylin T.",
+    role: "Kiracı",
+    text: "CV'mi oluşturdum, 3 gün içinde 5 ev sahibi bana ulaştı. En uygun teklifi değerlendirdim.",
+    rating: 5,
+  },
+  {
+    name: "Serkan B.",
+    role: "Araç Satıcısı",
+    text: "Arabamı satmak istiyordum, bütçesi uygun alıcıları filtreledim ve hemen iletişime geçtim. Harika platform!",
+    rating: 5,
+  },
+];
+
+const advantages = [
+  { icon: Zap, title: "Hızlı Eşleşme", desc: "Doğru alıcıyı anında bul. Zaman kaybetme." },
+  { icon: Shield, title: "Güvenli Platform", desc: "Kimlik doğrulama ve güvenli mesajlaşma." },
+  { icon: Globe, title: "81 İlde Aktif", desc: "Türkiye'nin her yerinden profiller." },
+  { icon: CheckCircle, title: "Ücretsiz Kullanım", desc: "Profil oluşturmak tamamen ücretsiz." },
+];
+
+// Recent profiles from mock data
+const recentProfiles = mockProfiles.slice(0, 6);
 
 const Index = () => {
   return (
@@ -82,7 +89,7 @@ const Index = () => {
                 <span className="text-accent">Satıcı</span> Bulur.
               </h1>
               <p className="mb-8 max-w-lg text-lg text-primary-foreground/75">
-                Ev mi arıyorsun? Araba mı? Profilini oluştur, bütçeni ve kriterlerini belirle.
+                Ev mi arıyorsun? Araba mı? İş mi? Profilini oluştur, bütçeni ve kriterlerini belirle.
                 Satıcılar ve ev sahipleri seni bulsun.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -115,7 +122,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Wave divider */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -151,15 +157,11 @@ const Index = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
-            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">
-              Kategorilere Göz At
-            </h2>
-            <p className="text-muted-foreground">
-              Kriterlerine uygun alıcı ve kiracı profillerini keşfet
-            </p>
+            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Kategorilere Göz At</h2>
+            <p className="text-muted-foreground">6 farklı kategoride binlerce arayan profili</p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((cat, i) => {
               const Icon = cat.icon;
               return (
@@ -168,22 +170,20 @@ const Index = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.15 }}
+                  transition={{ delay: i * 0.08 }}
                 >
                   <Link to={cat.to}>
-                    <div className="group relative overflow-hidden rounded-2xl bg-card p-8 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1">
-                      <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
-                        <Icon className="h-7 w-7" />
+                    <div className="group relative overflow-hidden rounded-2xl bg-card p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1">
+                      <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+                        <Icon className="h-6 w-6" />
                       </div>
-                      <h3 className="mb-2 font-display text-xl font-semibold text-foreground">
-                        {cat.title}
-                      </h3>
-                      <p className="mb-4 text-sm text-muted-foreground">{cat.description}</p>
+                      <h3 className="mb-1 font-display text-lg font-semibold text-foreground">{cat.title}</h3>
+                      <p className="mb-3 text-sm text-muted-foreground">{cat.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-accent">
-                          {cat.count.toLocaleString("tr-TR")} aktif profil
+                          {cat.count.toLocaleString("tr-TR")} profil
                         </span>
-                        <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-accent" />
+                        <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-accent" />
                       </div>
                     </div>
                   </Link>
@@ -194,13 +194,42 @@ const Index = () => {
         </div>
       </section>
 
-      {/* How it works */}
+      {/* Advantages */}
       <section className="bg-card py-16">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
-            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">
-              Nasıl Çalışır?
-            </h2>
+            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Neden BulBeni?</h2>
+            <p className="text-muted-foreground">Geleneksel ilan sitelerinden farkımız</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {advantages.map((adv, i) => {
+              const Icon = adv.icon;
+              return (
+                <motion.div
+                  key={adv.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="rounded-2xl bg-background p-6 text-center shadow-card"
+                >
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mb-2 font-display font-semibold text-foreground">{adv.title}</h3>
+                  <p className="text-sm text-muted-foreground">{adv.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="mb-12 text-center">
+            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Nasıl Çalışır?</h2>
             <p className="text-muted-foreground">3 adımda aradığını bul</p>
           </div>
 
@@ -222,18 +251,121 @@ const Index = () => {
                   <div className="absolute -top-2 left-1/2 -translate-x-1/2 font-display text-6xl font-bold text-muted/50">
                     {step.step}
                   </div>
-                  <h3 className="mb-2 font-display text-xl font-semibold text-foreground">
-                    {step.title}
-                  </h3>
+                  <h3 className="mb-2 font-display text-xl font-semibold text-foreground">{step.title}</h3>
                   <p className="text-sm text-muted-foreground">{step.description}</p>
                 </motion.div>
               );
             })}
           </div>
+
+          <div className="mt-8 text-center">
+            <Link to="/nasil-calisir">
+              <Button variant="outline" className="gap-2">
+                Detaylı bilgi <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Trust section */}
+      {/* Recent Profiles */}
+      <section className="bg-card py-16">
+        <div className="container mx-auto px-4">
+          <div className="mb-10 flex items-center justify-between">
+            <div>
+              <h2 className="mb-1 font-display text-3xl font-bold text-foreground">Son Eklenen Profiller</h2>
+              <p className="text-muted-foreground">En son eklenen arayan CV'leri</p>
+            </div>
+            <Link to="/ara/kiralik-ev">
+              <Button variant="outline" className="gap-2 hidden sm:flex">
+                Tümünü Gör <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {recentProfiles.map((profile, i) => (
+              <motion.div
+                key={profile.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+              >
+                <Link to={`/profil/${profile.id}`}>
+                  <div className="group rounded-2xl bg-background p-5 shadow-card transition-all hover:shadow-card-hover hover:-translate-y-0.5">
+                    <div className="mb-3 flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 font-display text-sm font-bold text-accent">
+                        {profile.avatar}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-foreground truncate">{profile.name}</span>
+                          {profile.verified && (
+                            <Badge variant="secondary" className="text-xs bg-success/10 text-success border-0 shrink-0">✓</Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground">{profile.job} · {profile.city}</p>
+                      </div>
+                      <Badge variant="outline" className="text-xs shrink-0">{profile.category === "kiralik-ev" ? "Kiralık" : profile.category === "satilik-ev" ? "Satılık" : profile.category === "arac" ? "Araç" : profile.category === "is-ariyorum" ? "İş" : profile.category === "ikinci-el" ? "2. El" : "Hizmet"}</Badge>
+                    </div>
+                    <p className="text-sm font-medium text-accent mb-2">{profile.budget}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{profile.description}</p>
+                    <div className="mt-3 flex items-center justify-end gap-1 text-xs font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
+                      İncele <ArrowRight className="h-3 w-3" />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-6 text-center sm:hidden">
+            <Link to="/ara/kiralik-ev">
+              <Button variant="outline" className="gap-2">
+                Tümünü Gör <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="mb-12 text-center">
+            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Kullanıcılarımız Ne Diyor?</h2>
+            <p className="text-muted-foreground">Başarılı eşleşme hikayeleri</p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="rounded-2xl bg-card p-6 shadow-card"
+              >
+                <Quote className="mb-3 h-8 w-8 text-accent/30" />
+                <p className="mb-4 text-muted-foreground">{t.text}</p>
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: t.rating }).map((_, j) => (
+                    <Star key={j} className="h-4 w-4 fill-accent text-accent" />
+                  ))}
+                </div>
+                <div className="mt-3 border-t pt-3">
+                  <p className="font-semibold text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">{t.role}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust + CTA */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="rounded-2xl bg-gradient-hero p-8 md:p-12">
@@ -244,7 +376,6 @@ const Index = () => {
                 </h2>
                 <p className="mb-6 text-primary-foreground/75">
                   Tüm profiller doğrulanır. Güvenli mesajlaşma ile iletişim kurun.
-                  Kişisel bilgileriniz korunur.
                 </p>
                 <div className="flex flex-col gap-3">
                   {[
