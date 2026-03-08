@@ -198,7 +198,7 @@ const Index = () => {
       <section className="bg-card py-16">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
-            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Neden BulBeni?</h2>
+            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Neden BizeUygun?</h2>
             <p className="text-muted-foreground">Geleneksel ilan sitelerinden farkımız</p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

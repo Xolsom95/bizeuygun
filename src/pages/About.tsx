@@ -54,7 +54,7 @@ const About = () => {
               <h2 className="mb-4 font-display text-2xl font-bold text-foreground">Misyonumuz</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Ev, araç veya hizmet arayan insanların güçlü olduğu bir pazar yeri oluşturmak.
-                Geleneksel sistemde alıcılar yüzlerce ilan arasında kaybolur. BulBeni'de ise
+                Geleneksel sistemde alıcılar yüzlerce ilan arasında kaybolur. BizeUygun'da ise
                 arayan kişi kriterlerini belirler, satıcı onu bulur. Doğru eşleşme, daha az
                 zaman kaybı, daha mutlu insanlar.
               </p>

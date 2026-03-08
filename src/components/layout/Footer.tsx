@@ -52,7 +52,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 border-t border-primary-foreground/10 pt-6 text-center text-sm text-primary-foreground/50">
-          © {new Date().getFullYear()} BulBeni. Tüm hakları saklıdır.
+          © {new Date().getFullYear()} BizeUygun. Tüm hakları saklıdır.
         </div>
       </div>
     </footer>

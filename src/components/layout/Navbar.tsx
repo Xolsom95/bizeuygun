@@ -52,7 +52,7 @@ const Navbar = () => {
             <Search className="h-5 w-5 text-accent-foreground" />
           </div>
           <span className="font-display text-xl font-bold text-foreground">
-            Bul<span className="text-accent">Beni</span>
+            Bize<span className="text-accent">Uygun</span>
           </span>
         </Link>
 

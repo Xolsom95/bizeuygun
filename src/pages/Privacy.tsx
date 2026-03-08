@@ -25,7 +25,7 @@ const sections = [
   },
   {
     title: "6. Kullanıcı Hakları",
-    content: "KVKK kapsamında kişisel verilerinize erişim, düzeltme, silme ve taşıma haklarına sahipsiniz. Bu haklarınızı kullanmak için destek@bulbeni.com adresine başvurabilirsiniz.",
+    content: "KVKK kapsamında kişisel verilerinize erişim, düzeltme, silme ve taşıma haklarına sahipsiniz. Bu haklarınızı kullanmak için destek@bizeuygun.com adresine başvurabilirsiniz.",
   },
   {
     title: "7. Veri Saklama Süresi",
