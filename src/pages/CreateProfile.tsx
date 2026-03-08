@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Home, Building2, Car, ArrowRight, ArrowLeft, User, MapPin, Briefcase, ShoppingBag, Wrench, CheckCircle, Loader2 } from "lucide-react";
+import { Home, Building2, Car, ArrowRight, ArrowLeft, User, MapPin, Briefcase, CheckCircle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "@/components/layout/Navbar";
@@ -20,10 +20,8 @@ import { supabase } from "@/integrations/supabase/client";
 const categoryOptions = [
   { value: "kiralik-ev", label: "Kiralık Ev Arıyorum", icon: Home },
   { value: "satilik-ev", label: "Satılık Ev Arıyorum", icon: Building2 },
-  { value: "arac", label: "Araç Arıyorum", icon: Car },
+  { value: "arac", label: "Satılık Araç Arıyorum", icon: Car },
   { value: "is-ariyorum", label: "İş Arıyorum", icon: Briefcase },
-  { value: "ikinci-el", label: "İkinci El Eşya Arıyorum", icon: ShoppingBag },
-  { value: "hizmet", label: "Hizmet Arıyorum", icon: Wrench },
 ];
 
 const featuresByCategory: Record<string, string[]> = {
