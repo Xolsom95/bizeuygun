@@ -35,8 +35,6 @@ const App = () => (
             <Route path="/ara/satilik-ev" element={<SearchPage key="satilik-ev" category="satilik-ev" />} />
             <Route path="/ara/arac" element={<SearchPage key="arac" category="arac" />} />
             <Route path="/ara/is-ariyorum" element={<SearchPage key="is-ariyorum" category="is-ariyorum" />} />
-            <Route path="/ara/ikinci-el" element={<SearchPage key="ikinci-el" category="ikinci-el" />} />
-            <Route path="/ara/hizmet" element={<SearchPage key="hizmet" category="hizmet" />} />
             <Route path="/profil/:id" element={<ProfileDetail />} />
             <Route path="/profil-olustur" element={<CreateProfile />} />
             <Route path="/nasil-calisir" element={<HowItWorks />} />

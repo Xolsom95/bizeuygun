@@ -78,8 +78,6 @@ const CreateProfile = () => {
   const getBudgetPlaceholder = (type: "min" | "max") => {
     if (category === "kiralik-ev") return type === "min" ? "8000" : "15000";
     if (category === "is-ariyorum") return type === "min" ? "25000" : "50000";
-    if (category === "ikinci-el") return type === "min" ? "1000" : "10000";
-    if (category === "hizmet") return type === "min" ? "2000" : "10000";
     return type === "min" ? "500000" : "1500000";
   };
 

@@ -301,8 +301,7 @@ const ProfileDetail = () => {
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
                   {listing.category === "kiralik-ev" ? "Aylık kira bütçesi" :
-                   listing.category === "is-ariyorum" ? "Beklenen maaş aralığı" :
-                   listing.category === "hizmet" ? "Hizmet bütçesi" : "Toplam bütçe"}
+                   listing.category === "is-ariyorum" ? "Beklenen maaş aralığı" : "Toplam bütçe"}
                 </p>
               </div>
             </div>

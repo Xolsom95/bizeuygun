@@ -19,16 +19,11 @@ import { useAuth } from "@/contexts/AuthContext";
 const navLinks = [
   { to: "/ara/kiralik-ev", label: "Kiralık Ev", icon: Home },
   { to: "/ara/satilik-ev", label: "Satılık Ev", icon: Building2 },
-  { to: "/ara/arac", label: "Araç", icon: Car },
-];
-
-const moreLinks = [
+  { to: "/ara/arac", label: "Satılık Araç", icon: Car },
   { to: "/ara/is-ariyorum", label: "İş Arayanlar", icon: Briefcase },
-  { to: "/ara/ikinci-el", label: "İkinci El", icon: ShoppingBag },
-  { to: "/ara/hizmet", label: "Hizmet", icon: Wrench },
 ];
 
-const allLinks = [...navLinks, ...moreLinks];
+const allLinks = [...navLinks];
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
