@@ -156,7 +156,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
             <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Kategorilere Göz At</h2>
-            <p className="text-muted-foreground">6 farklı kategoride binlerce arayan profili</p>
+            <p className="text-muted-foreground">4 farklı kategoride binlerce arayan profili</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
