@@ -12,7 +12,7 @@ const Footer = () => {
                 <Search className="h-5 w-5 text-accent-foreground" />
               </div>
               <span className="font-display text-xl font-bold">
-                Bul<span className="text-accent">Beni</span>
+                Bize<span className="text-accent">Uygun</span>
               </span>
             </div>
             <p className="text-sm text-primary-foreground/70">
