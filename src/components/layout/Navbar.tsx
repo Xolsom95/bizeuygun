@@ -1,14 +1,28 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Home, Car, Building2 } from "lucide-react";
+import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { to: "/ara/kiralik-ev", label: "Kiralık Ev", icon: Home },
   { to: "/ara/satilik-ev", label: "Satılık Ev", icon: Building2 },
   { to: "/ara/arac", label: "Araç", icon: Car },
 ];
+
+const moreLinks = [
+  { to: "/ara/is-ariyorum", label: "İş Arayanlar", icon: Briefcase },
+  { to: "/ara/ikinci-el", label: "İkinci El", icon: ShoppingBag },
+  { to: "/ara/hizmet", label: "Hizmet", icon: Wrench },
+];
+
+const allLinks = [...navLinks, ...moreLinks];
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -43,6 +57,27 @@ const Navbar = () => {
               </Link>
             );
           })}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-1">
+                Daha Fazla <ChevronDown className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {moreLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <DropdownMenuItem key={link.to} asChild>
+                    <Link to={link.to} className="flex items-center gap-2">
+                      <Icon className="h-4 w-4" />
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
@@ -76,7 +111,7 @@ const Navbar = () => {
             className="overflow-hidden border-t bg-card md:hidden"
           >
             <div className="flex flex-col gap-1 p-4">
-              {navLinks.map((link) => {
+              {allLinks.map((link) => {
                 const Icon = link.icon;
                 return (
                   <Link key={link.to} to={link.to} onClick={() => setMobileOpen(false)}>

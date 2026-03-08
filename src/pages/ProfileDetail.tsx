@@ -15,67 +15,28 @@ import {
   Shield,
   Calendar,
   User,
+  GraduationCap,
+  Cigarette,
+  Share2,
+  Flag,
 } from "lucide-react";
+import { toast } from "sonner";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { getProfileById } from "@/data/mockProfiles";
 
-// Same mock data (in production, fetch from DB)
-const mockProfiles: Record<string, any> = {
-  "1": {
-    id: "1",
-    name: "Ahmet Yılmaz",
-    age: 32,
-    job: "Yazılım Mühendisi",
-    company: "TechCorp",
-    city: "İstanbul",
-    district: "Kadıköy",
-    budget: "12.000 - 18.000 ₺",
-    category: "kiralik-ev",
-    maritalStatus: "Evli",
-    hasChildren: true,
-    childrenCount: 2,
-    hasPet: false,
-    preferences: ["3+1", "Asansörlü", "Otoparklı", "Balkonlu", "Doğalgaz", "Site içi"],
-    description:
-      "Merhaba, 2 çocuklu bir aileyiz. 5 yıldır İstanbul'da yaşıyoruz. Yazılım mühendisi olarak çalışıyorum ve düzenli bir gelirim var. Güvenli ve sakin bir mahallede, okula yakın bir daire arıyoruz. Referanslarımız mevcuttur. Sigara kullanmıyoruz, temiz ve düzenli bir aile olarak yaşıyoruz.",
-    avatar: "AY",
-    createdAt: "2 gün önce",
-    verified: true,
-    education: "Bilgisayar Mühendisliği, İTÜ",
-    income: "Aylık 45.000 ₺+",
-    movingDate: "1 ay içinde",
-    references: true,
-  },
-  "2": {
-    id: "2",
-    name: "Elif Kaya",
-    age: 28,
-    job: "Grafik Tasarımcı",
-    company: "Freelance",
-    city: "İstanbul",
-    district: "Beşiktaş",
-    budget: "8.000 - 12.000 ₺",
-    category: "kiralik-ev",
-    maritalStatus: "Bekar",
-    hasChildren: false,
-    hasPet: true,
-    petType: "Kedi",
-    preferences: ["2+1", "Evcil hayvan dostu", "Metro yakını", "Aydınlık"],
-    description:
-      "Freelance grafik tasarımcıyım, evden çalışıyorum. 3 yaşında bir kedim var, çok sakin ve temiz. Sigara içmiyorum. Sakin ve düzenli bir kiracıyım. İstanbul'da 6 yıldır yaşıyorum.",
-    avatar: "EK",
-    createdAt: "5 saat önce",
-    verified: true,
-    education: "Güzel Sanatlar, Mimar Sinan",
-    income: "Aylık 25.000 ₺+",
-    movingDate: "Hemen",
-    references: true,
-  },
+const categoryLabels: Record<string, string> = {
+  "kiralik-ev": "Kiralık Ev",
+  "satilik-ev": "Satılık Ev",
+  "arac": "Araç",
+  "is-ariyorum": "İş",
+  "ikinci-el": "İkinci El",
+  "hizmet": "Hizmet",
 };
 
 const ProfileDetail = () => {
   const { id } = useParams();
-  const profile = mockProfiles[id || "1"];
+  const profile = getProfileById(id || "1");
 
   if (!profile) {
     return (
@@ -83,6 +44,7 @@ const ProfileDetail = () => {
         <Navbar />
         <div className="container mx-auto px-4 py-20 text-center">
           <h1 className="font-display text-2xl font-bold text-foreground">Profil Bulunamadı</h1>
+          <p className="mt-2 text-muted-foreground">Bu profil silinmiş veya mevcut değil.</p>
           <Link to="/">
             <Button variant="hero" className="mt-4">Ana Sayfa</Button>
           </Link>
@@ -92,15 +54,33 @@ const ProfileDetail = () => {
     );
   }
 
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Profil linki kopyalandı!");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
-        <Link to="/ara/kiralik-ev" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-          Geri Dön
-        </Link>
+        <div className="mb-6 flex items-center justify-between">
+          <Link
+            to={`/ara/${profile.category}`}
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {categoryLabels[profile.category] || "Geri"} Arayanlar
+          </Link>
+          <div className="flex gap-2">
+            <Button variant="ghost" size="sm" className="gap-1" onClick={handleShare}>
+              <Share2 className="h-4 w-4" /> Paylaş
+            </Button>
+            <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground">
+              <Flag className="h-4 w-4" /> Bildir
+            </Button>
+          </div>
+        </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Main */}
@@ -117,13 +97,14 @@ const ProfileDetail = () => {
                     {profile.avatar}
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <h1 className="font-display text-2xl font-bold text-foreground">{profile.name}</h1>
                       {profile.verified && (
                         <Badge className="bg-success/10 text-success border-0">
                           <Shield className="mr-1 h-3 w-3" /> Doğrulanmış
                         </Badge>
                       )}
+                      <Badge variant="outline">{categoryLabels[profile.category]} Arıyor</Badge>
                     </div>
                     <p className="text-muted-foreground">{profile.age} yaş · {profile.city}, {profile.district}</p>
                   </div>
@@ -152,6 +133,17 @@ const ProfileDetail = () => {
                 ))}
               </div>
             </div>
+
+            {/* Similar Profiles Hint */}
+            <div className="rounded-2xl bg-muted/50 p-6">
+              <h3 className="mb-2 font-display font-semibold text-foreground">Benzer Profiller</h3>
+              <p className="mb-3 text-sm text-muted-foreground">
+                Bu profile benzer daha fazla arayan görmek ister misiniz?
+              </p>
+              <Link to={`/ara/${profile.category}`}>
+                <Button variant="outline" size="sm">Tüm Profilleri Gör</Button>
+              </Link>
+            </div>
           </motion.div>
 
           {/* Sidebar */}
@@ -167,7 +159,9 @@ const ProfileDetail = () => {
               <div className="text-center">
                 <div className="font-display text-2xl font-bold text-accent">{profile.budget}</div>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {profile.category === "kiralik-ev" ? "Aylık kira bütçesi" : "Toplam bütçe"}
+                  {profile.category === "kiralik-ev" ? "Aylık kira bütçesi" :
+                   profile.category === "is-ariyorum" ? "Beklenen maaş aralığı" :
+                   profile.category === "hizmet" ? "Hizmet bütçesi" : "Toplam bütçe"}
                 </p>
               </div>
             </div>
@@ -176,64 +170,24 @@ const ProfileDetail = () => {
             <div className="rounded-2xl bg-card p-6 shadow-card">
               <h3 className="mb-4 font-display font-semibold text-foreground">Detaylar</h3>
               <div className="space-y-3 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Briefcase className="h-4 w-4" /> Meslek
-                  </span>
-                  <span className="font-medium text-foreground">{profile.job}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Building className="h-4 w-4" /> Şirket
-                  </span>
-                  <span className="font-medium text-foreground">{profile.company}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Heart className="h-4 w-4" /> Medeni Hal
-                  </span>
-                  <span className="font-medium text-foreground">{profile.maritalStatus}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Baby className="h-4 w-4" /> Çocuk
-                  </span>
-                  <span className="font-medium text-foreground">
-                    {profile.hasChildren ? `${profile.childrenCount || "Var"}` : "Yok"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Dog className="h-4 w-4" /> Evcil Hayvan
-                  </span>
-                  <span className="font-medium text-foreground">
-                    {profile.hasPet ? profile.petType || "Var" : "Yok"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Wallet className="h-4 w-4" /> Gelir
-                  </span>
-                  <span className="font-medium text-foreground">{profile.income}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4" /> Taşınma
-                  </span>
-                  <span className="font-medium text-foreground">{profile.movingDate}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <User className="h-4 w-4" /> Referans
-                  </span>
-                  <span className="font-medium text-foreground">
-                    {profile.references ? "Mevcut" : "Yok"}
-                  </span>
-                </div>
+                <DetailRow icon={Briefcase} label="Meslek" value={profile.job} />
+                <DetailRow icon={Building} label="Şirket" value={profile.company} />
+                {profile.education && <DetailRow icon={GraduationCap} label="Eğitim" value={profile.education} />}
+                <DetailRow icon={Heart} label="Medeni Hal" value={profile.maritalStatus} />
+                <DetailRow icon={Baby} label="Çocuk" value={profile.hasChildren ? `${profile.childrenCount || "Var"}` : "Yok"} />
+                <DetailRow icon={Dog} label="Evcil Hayvan" value={profile.hasPet ? profile.petType || "Var" : "Yok"} />
+                {profile.income && <DetailRow icon={Wallet} label="Gelir" value={profile.income} />}
+                {profile.movingDate && <DetailRow icon={Calendar} label="Taşınma" value={profile.movingDate} />}
+                {profile.references !== undefined && (
+                  <DetailRow icon={User} label="Referans" value={profile.references ? "Mevcut" : "Yok"} />
+                )}
+                {profile.smoking !== undefined && (
+                  <DetailRow icon={Cigarette} label="Sigara" value={profile.smoking ? "Evet" : "Hayır"} />
+                )}
               </div>
             </div>
 
-            {/* Contact */}
+            {/* Contact CTA */}
             <div className="rounded-2xl bg-gradient-accent p-6 text-center text-accent-foreground">
               <h3 className="mb-2 font-display font-semibold">İletişime Geç</h3>
               <p className="mb-4 text-sm text-accent-foreground/80">
@@ -245,6 +199,12 @@ const ProfileDetail = () => {
                 </Button>
               </Link>
             </div>
+
+            {/* Profile Meta */}
+            <div className="rounded-xl border p-4 text-xs text-muted-foreground">
+              <p>Profil oluşturulma: {profile.createdAt}</p>
+              <p>Profil ID: #{profile.id}</p>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -253,5 +213,14 @@ const ProfileDetail = () => {
     </div>
   );
 };
+
+const DetailRow = ({ icon: Icon, label, value }: { icon: typeof Briefcase; label: string; value: string }) => (
+  <div className="flex items-center justify-between">
+    <span className="flex items-center gap-2 text-muted-foreground">
+      <Icon className="h-4 w-4" /> {label}
+    </span>
+    <span className="font-medium text-foreground">{value}</span>
+  </div>
+);
 
 export default ProfileDetail;
