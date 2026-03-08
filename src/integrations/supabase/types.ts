@@ -14,7 +14,202 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          budget_max: number | null
+          budget_min: number | null
+          category: string
+          city: string | null
+          created_at: string
+          description: string | null
+          district: string | null
+          experience: string | null
+          id: string
+          is_active: boolean | null
+          moving_date: string | null
+          preferences: string[] | null
+          updated_at: string
+          user_id: string
+          verified: boolean | null
+        }
+        Insert: {
+          budget_max?: number | null
+          budget_min?: number | null
+          category: string
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          district?: string | null
+          experience?: string | null
+          id?: string
+          is_active?: boolean | null
+          moving_date?: string | null
+          preferences?: string[] | null
+          updated_at?: string
+          user_id: string
+          verified?: boolean | null
+        }
+        Update: {
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          district?: string | null
+          experience?: string | null
+          id?: string
+          is_active?: boolean | null
+          moving_date?: string | null
+          preferences?: string[] | null
+          updated_at?: string
+          user_id?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+          listing_id: string | null
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          listing_id?: string | null
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          listing_id?: string | null
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          age: number | null
+          avatar_url: string | null
+          bio: string | null
+          children_count: number | null
+          city: string | null
+          company: string | null
+          created_at: string
+          district: string | null
+          education: string | null
+          has_children: boolean | null
+          has_pet: boolean | null
+          has_references: boolean | null
+          id: string
+          income: string | null
+          job: string | null
+          marital_status: string | null
+          name: string
+          pet_type: string | null
+          phone: string | null
+          smoking: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age?: number | null
+          avatar_url?: string | null
+          bio?: string | null
+          children_count?: number | null
+          city?: string | null
+          company?: string | null
+          created_at?: string
+          district?: string | null
+          education?: string | null
+          has_children?: boolean | null
+          has_pet?: boolean | null
+          has_references?: boolean | null
+          id?: string
+          income?: string | null
+          job?: string | null
+          marital_status?: string | null
+          name: string
+          pet_type?: string | null
+          phone?: string | null
+          smoking?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age?: number | null
+          avatar_url?: string | null
+          bio?: string | null
+          children_count?: number | null
+          city?: string | null
+          company?: string | null
+          created_at?: string
+          district?: string | null
+          education?: string | null
+          has_children?: boolean | null
+          has_pet?: boolean | null
+          has_references?: boolean | null
+          id?: string
+          income?: string | null
+          job?: string | null
+          marital_status?: string | null
+          name?: string
+          pet_type?: string | null
+          phone?: string | null
+          smoking?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
