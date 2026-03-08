@@ -29,8 +29,6 @@ const featuresByCategory: Record<string, string[]> = {
   "satilik-ev": ["1+1", "2+1", "3+1", "4+1", "5+1", "Villa", "Müstakil", "Bahçeli", "Garajlı", "Akıllı ev", "Yeni bina", "Havuzlu", "Teras", "Manzaralı"],
   "arac": ["Sedan", "SUV", "Hatchback", "Station Wagon", "Otomatik", "Manuel", "Benzin", "Dizel", "Hibrit", "Elektrik", "2020+", "2022+", "2024+", "0 km", "Düşük km"],
   "is-ariyorum": ["Remote", "Hibrit", "Ofis", "Tam zamanlı", "Part-time", "Freelance", "Stajyer", "Yazılım", "Pazarlama", "Finans", "Sağlık", "Eğitim", "Mühendislik", "SGK'lı"],
-  "ikinci-el": ["Mobilya", "Beyaz eşya", "Elektronik", "Laptop", "Telefon", "Ev dekorasyonu", "Spor ekipmanı", "Müzik aleti", "Az kullanılmış", "Taşıma dahil", "Fatura/garanti"],
-  "hizmet": ["Temizlik", "Tadilat", "Boyama", "Tesisatçı", "Elektrikçi", "Nakliyat", "İç dekorasyon", "Bahçe bakımı", "Profesyonel", "Referanslı", "Portföylü", "Hafta sonu müsait"],
 };
 
 const CreateProfile = () => {
