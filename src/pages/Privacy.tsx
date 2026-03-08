@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 const sections = [
   {
     title: "1. Toplanan Veriler",
-    content: "BulBeni olarak, profil oluşturma sürecinde sağladığınız kişisel bilgileri (ad soyad, yaş, meslek, medeni hal, bütçe tercihleri vb.) toplarız. Ayrıca site kullanımınıza ilişkin anonim istatistiksel veriler toplanabilir.",
+    content: "BizeUygun olarak, profil oluşturma sürecinde sağladığınız kişisel bilgileri (ad soyad, yaş, meslek, medeni hal, bütçe tercihleri vb.) toplarız. Ayrıca site kullanımınıza ilişkin anonim istatistiksel veriler toplanabilir.",
   },
   {
     title: "2. Verilerin Kullanımı",
