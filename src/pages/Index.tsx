@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Home, Building2, Car, ArrowRight, Search, UserCheck, MessageSquare,
-  Shield, Users, TrendingUp, Briefcase, Star,
-  Quote, CheckCircle, Zap, Globe,
+  Shield, Users, TrendingUp, Briefcase,
+  CheckCircle, Zap, Globe,
 } from "lucide-react";
 import heroIllustration from "@/assets/hero-illustration.png";
 import Navbar from "@/components/layout/Navbar";
