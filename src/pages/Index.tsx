@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Home, Building2, Car, ArrowRight, Search, UserCheck, MessageSquare,
-  Shield, Users, TrendingUp, Briefcase, ShoppingBag, Wrench, Star,
+  Shield, Users, TrendingUp, Briefcase, Star,
   Quote, CheckCircle, Zap, Globe,
 } from "lucide-react";
 import heroIllustration from "@/assets/hero-illustration.png";
@@ -15,10 +15,8 @@ import { mockProfiles } from "@/data/mockProfiles";
 const categories = [
   { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", count: 2847 },
   { title: "Satılık Ev", description: "Alıcı profilleri ve kriterleri", icon: Building2, to: "/ara/satilik-ev", count: 1523 },
-  { title: "Araç", description: "Araç alıcı talepleri", icon: Car, to: "/ara/arac", count: 3291 },
+  { title: "Satılık Araç", description: "Araç alıcı talepleri", icon: Car, to: "/ara/arac", count: 3291 },
   { title: "İş Arayanlar", description: "Profesyonel CV'ler", icon: Briefcase, to: "/ara/is-ariyorum", count: 4120 },
-  { title: "İkinci El", description: "İkinci el eşya talepleri", icon: ShoppingBag, to: "/ara/ikinci-el", count: 1890 },
-  { title: "Hizmet", description: "Hizmet talepleri", icon: Wrench, to: "/ara/hizmet", count: 2340 },
 ];
 
 const steps = [

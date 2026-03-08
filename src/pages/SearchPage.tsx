@@ -23,8 +23,6 @@ import {
   Building2,
   Car,
   Search,
-  Wrench,
-  ShoppingBag,
   SortAsc,
   Loader2,
 } from "lucide-react";
@@ -35,10 +33,8 @@ import { supabase } from "@/integrations/supabase/client";
 const categoryConfig: Record<string, { label: string; icon: typeof Home; description: string }> = {
   "kiralik-ev": { label: "Kiralık Ev Arayanlar", icon: Home, description: "Kiracı profilleri ve bütçeleri" },
   "satilik-ev": { label: "Satılık Ev Arayanlar", icon: Building2, description: "Alıcı profilleri ve bütçeleri" },
-  "arac": { label: "Araç Arayanlar", icon: Car, description: "Araç alıcı profilleri" },
+  "arac": { label: "Satılık Araç Arayanlar", icon: Car, description: "Araç alıcı profilleri" },
   "is-ariyorum": { label: "İş Arayanlar", icon: Briefcase, description: "İş arayan profesyoneller" },
-  "ikinci-el": { label: "İkinci El Arayanlar", icon: ShoppingBag, description: "İkinci el eşya arayanlar" },
-  "hizmet": { label: "Hizmet Arayanlar", icon: Wrench, description: "Hizmet talepleri" },
 };
 
 interface ListingWithProfile {

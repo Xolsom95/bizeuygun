@@ -18,10 +18,8 @@ import { supabase } from "@/integrations/supabase/client";
 const categoryLabels: Record<string, string> = {
   "kiralik-ev": "Kiralık Ev",
   "satilik-ev": "Satılık Ev",
-  "arac": "Araç",
+  "arac": "Satılık Araç",
   "is-ariyorum": "İş",
-  "ikinci-el": "İkinci El",
-  "hizmet": "Hizmet",
 };
 
 interface Listing {

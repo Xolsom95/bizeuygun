@@ -23,10 +23,8 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-primary-foreground/70">
               <li><Link to="/ara/kiralik-ev" className="hover:text-accent transition-colors">Kiralık Ev</Link></li>
               <li><Link to="/ara/satilik-ev" className="hover:text-accent transition-colors">Satılık Ev</Link></li>
-              <li><Link to="/ara/arac" className="hover:text-accent transition-colors">Araç</Link></li>
+              <li><Link to="/ara/arac" className="hover:text-accent transition-colors">Satılık Araç</Link></li>
               <li><Link to="/ara/is-ariyorum" className="hover:text-accent transition-colors">İş Arayanlar</Link></li>
-              <li><Link to="/ara/ikinci-el" className="hover:text-accent transition-colors">İkinci El</Link></li>
-              <li><Link to="/ara/hizmet" className="hover:text-accent transition-colors">Hizmet</Link></li>
             </ul>
           </div>
 

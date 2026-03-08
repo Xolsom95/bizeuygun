@@ -32,10 +32,8 @@ import { useAuth } from "@/contexts/AuthContext";
 const categoryLabels: Record<string, string> = {
   "kiralik-ev": "Kiralık Ev",
   "satilik-ev": "Satılık Ev",
-  "arac": "Araç",
+  "arac": "Satılık Araç",
   "is-ariyorum": "İş",
-  "ikinci-el": "İkinci El",
-  "hizmet": "Hizmet",
 };
 
 interface ListingDetail {
@@ -303,8 +301,7 @@ const ProfileDetail = () => {
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
                   {listing.category === "kiralik-ev" ? "Aylık kira bütçesi" :
-                   listing.category === "is-ariyorum" ? "Beklenen maaş aralığı" :
-                   listing.category === "hizmet" ? "Hizmet bütçesi" : "Toplam bütçe"}
+                   listing.category === "is-ariyorum" ? "Beklenen maaş aralığı" : "Toplam bütçe"}
                 </p>
               </div>
             </div>

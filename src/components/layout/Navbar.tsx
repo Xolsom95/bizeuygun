@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut, LayoutDashboard, MessageSquare } from "lucide-react";
+import { Menu, X, User, Home, Car, Building2, Briefcase, LogOut, LayoutDashboard, MessageSquare } from "lucide-react";
 import logo from "@/assets/logo.png";
 import NotificationBell from "@/components/NotificationBell";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,16 +19,11 @@ import { useAuth } from "@/contexts/AuthContext";
 const navLinks = [
   { to: "/ara/kiralik-ev", label: "Kiralık Ev", icon: Home },
   { to: "/ara/satilik-ev", label: "Satılık Ev", icon: Building2 },
-  { to: "/ara/arac", label: "Araç", icon: Car },
-];
-
-const moreLinks = [
+  { to: "/ara/arac", label: "Satılık Araç", icon: Car },
   { to: "/ara/is-ariyorum", label: "İş Arayanlar", icon: Briefcase },
-  { to: "/ara/ikinci-el", label: "İkinci El", icon: ShoppingBag },
-  { to: "/ara/hizmet", label: "Hizmet", icon: Wrench },
 ];
 
-const allLinks = [...navLinks, ...moreLinks];
+const allLinks = [...navLinks];
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -68,27 +63,6 @@ const Navbar = () => {
               </Link>
             );
           })}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-1">
-                Daha Fazla <ChevronDown className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {moreLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <DropdownMenuItem key={link.to} asChild>
-                    <Link to={link.to} className="flex items-center gap-2">
-                      <Icon className="h-4 w-4" />
-                      {link.label}
-                    </Link>
-                  </DropdownMenuItem>
-                );
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
 
         <div className="hidden items-center gap-2 md:flex">

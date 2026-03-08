@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Home, Building2, Car, ArrowRight, ArrowLeft, User, MapPin, Briefcase, ShoppingBag, Wrench, CheckCircle, Loader2 } from "lucide-react";
+import { Home, Building2, Car, ArrowRight, ArrowLeft, User, MapPin, Briefcase, CheckCircle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "@/components/layout/Navbar";
@@ -20,10 +20,8 @@ import { supabase } from "@/integrations/supabase/client";
 const categoryOptions = [
   { value: "kiralik-ev", label: "Kiralık Ev Arıyorum", icon: Home },
   { value: "satilik-ev", label: "Satılık Ev Arıyorum", icon: Building2 },
-  { value: "arac", label: "Araç Arıyorum", icon: Car },
+  { value: "arac", label: "Satılık Araç Arıyorum", icon: Car },
   { value: "is-ariyorum", label: "İş Arıyorum", icon: Briefcase },
-  { value: "ikinci-el", label: "İkinci El Eşya Arıyorum", icon: ShoppingBag },
-  { value: "hizmet", label: "Hizmet Arıyorum", icon: Wrench },
 ];
 
 const featuresByCategory: Record<string, string[]> = {
@@ -31,8 +29,6 @@ const featuresByCategory: Record<string, string[]> = {
   "satilik-ev": ["1+1", "2+1", "3+1", "4+1", "5+1", "Villa", "Müstakil", "Bahçeli", "Garajlı", "Akıllı ev", "Yeni bina", "Havuzlu", "Teras", "Manzaralı"],
   "arac": ["Sedan", "SUV", "Hatchback", "Station Wagon", "Otomatik", "Manuel", "Benzin", "Dizel", "Hibrit", "Elektrik", "2020+", "2022+", "2024+", "0 km", "Düşük km"],
   "is-ariyorum": ["Remote", "Hibrit", "Ofis", "Tam zamanlı", "Part-time", "Freelance", "Stajyer", "Yazılım", "Pazarlama", "Finans", "Sağlık", "Eğitim", "Mühendislik", "SGK'lı"],
-  "ikinci-el": ["Mobilya", "Beyaz eşya", "Elektronik", "Laptop", "Telefon", "Ev dekorasyonu", "Spor ekipmanı", "Müzik aleti", "Az kullanılmış", "Taşıma dahil", "Fatura/garanti"],
-  "hizmet": ["Temizlik", "Tadilat", "Boyama", "Tesisatçı", "Elektrikçi", "Nakliyat", "İç dekorasyon", "Bahçe bakımı", "Profesyonel", "Referanslı", "Portföylü", "Hafta sonu müsait"],
 };
 
 const CreateProfile = () => {
@@ -76,15 +72,12 @@ const CreateProfile = () => {
   const getBudgetLabel = () => {
     if (category === "kiralik-ev") return "Aylık Kira Bütçesi";
     if (category === "is-ariyorum") return "Beklenen Maaş Aralığı";
-    if (category === "hizmet") return "Hizmet Bütçesi";
     return "Toplam Bütçe";
   };
 
   const getBudgetPlaceholder = (type: "min" | "max") => {
     if (category === "kiralik-ev") return type === "min" ? "8000" : "15000";
     if (category === "is-ariyorum") return type === "min" ? "25000" : "50000";
-    if (category === "ikinci-el") return type === "min" ? "1000" : "10000";
-    if (category === "hizmet") return type === "min" ? "2000" : "10000";
     return type === "min" ? "500000" : "1500000";
   };
 
