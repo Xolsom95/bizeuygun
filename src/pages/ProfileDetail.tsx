@@ -1,4 +1,5 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,11 +20,14 @@ import {
   Cigarette,
   Share2,
   Flag,
+  Loader2,
+  Star,
 } from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { getProfileById } from "@/data/mockProfiles";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const categoryLabels: Record<string, string> = {
   "kiralik-ev": "Kiralık Ev",
@@ -34,11 +38,141 @@ const categoryLabels: Record<string, string> = {
   "hizmet": "Hizmet",
 };
 
+interface ListingDetail {
+  id: string;
+  user_id: string;
+  category: string;
+  city: string | null;
+  district: string | null;
+  budget_min: number | null;
+  budget_max: number | null;
+  description: string | null;
+  preferences: string[] | null;
+  verified: boolean | null;
+  created_at: string;
+  moving_date: string | null;
+  experience: string | null;
+}
+
+interface ProfileData {
+  name: string;
+  age: number | null;
+  job: string | null;
+  company: string | null;
+  marital_status: string | null;
+  has_children: boolean | null;
+  children_count: number | null;
+  has_pet: boolean | null;
+  pet_type: string | null;
+  avatar_url: string | null;
+  education: string | null;
+  income: string | null;
+  smoking: boolean | null;
+  has_references: boolean | null;
+  bio: string | null;
+}
+
 const ProfileDetail = () => {
   const { id } = useParams();
-  const profile = getProfileById(id || "1");
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [listing, setListing] = useState<ListingDetail | null>(null);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isFavorited, setIsFavorited] = useState(false);
 
-  if (!profile) {
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const { data: listingData } = await supabase
+        .from("listings")
+        .select("*")
+        .eq("id", id || "")
+        .maybeSingle();
+
+      if (!listingData) {
+        setLoading(false);
+        return;
+      }
+
+      setListing(listingData);
+
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("name, age, job, company, marital_status, has_children, children_count, has_pet, pet_type, avatar_url, education, income, smoking, has_references, bio")
+        .eq("user_id", listingData.user_id)
+        .maybeSingle();
+
+      setProfile(profileData);
+
+      if (user) {
+        const { data: favData } = await supabase
+          .from("favorites")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("listing_id", listingData.id)
+          .maybeSingle();
+        setIsFavorited(!!favData);
+      }
+
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [id, user]);
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Profil linki kopyalandı!");
+  };
+
+  const handleFavorite = async () => {
+    if (!user) {
+      navigate("/giris");
+      return;
+    }
+    if (!listing) return;
+
+    if (isFavorited) {
+      await supabase.from("favorites").delete().eq("user_id", user.id).eq("listing_id", listing.id);
+      setIsFavorited(false);
+      toast.success("Favorilerden çıkarıldı");
+    } else {
+      await supabase.from("favorites").insert({ user_id: user.id, listing_id: listing.id });
+      setIsFavorited(true);
+      toast.success("Favorilere eklendi");
+    }
+  };
+
+  const handleMessage = () => {
+    if (!user) {
+      navigate("/giris");
+      return;
+    }
+    navigate("/mesajlar", { state: { receiverId: listing?.user_id } });
+  };
+
+  const formatBudget = (min: number | null, max: number | null) => {
+    if (!min && !max) return "Belirtilmedi";
+    const fmt = (n: number) => n.toLocaleString("tr-TR");
+    if (min && max) return `${fmt(min)} - ${fmt(max)} ₺`;
+    if (min) return `${fmt(min)} ₺+`;
+    return `${fmt(max!)} ₺'ye kadar`;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="flex items-center justify-center py-32">
+          <Loader2 className="h-8 w-8 animate-spin text-accent" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!listing || !profile) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
@@ -54,10 +188,16 @@ const ProfileDetail = () => {
     );
   }
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast.success("Profil linki kopyalandı!");
-  };
+  const initials = profile.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+  const timeAgo = (() => {
+    const diff = Date.now() - new Date(listing.created_at).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return `${mins} dk önce`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours} saat önce`;
+    const days = Math.floor(hours / 24);
+    return `${days} gün önce`;
+  })();
 
   return (
     <div className="min-h-screen bg-background">
@@ -66,13 +206,17 @@ const ProfileDetail = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6 flex items-center justify-between">
           <Link
-            to={`/ara/${profile.category}`}
+            to={`/ara/${listing.category}`}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            {categoryLabels[profile.category] || "Geri"} Arayanlar
+            {categoryLabels[listing.category] || "Geri"} Arayanlar
           </Link>
           <div className="flex gap-2">
+            <Button variant="ghost" size="sm" className="gap-1" onClick={handleFavorite}>
+              <Star className={`h-4 w-4 ${isFavorited ? "fill-accent text-accent" : ""}`} />
+              {isFavorited ? "Favorilerde" : "Favorile"}
+            </Button>
             <Button variant="ghost" size="sm" className="gap-1" onClick={handleShare}>
               <Share2 className="h-4 w-4" /> Paylaş
             </Button>
@@ -83,127 +227,130 @@ const ProfileDetail = () => {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {/* Main */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="lg:col-span-2 space-y-6"
           >
-            {/* Profile Header */}
             <div className="rounded-2xl bg-card p-6 shadow-card">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 font-display text-xl font-bold text-accent">
-                    {profile.avatar}
+                    {initials}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
                       <h1 className="font-display text-2xl font-bold text-foreground">{profile.name}</h1>
-                      {profile.verified && (
+                      {listing.verified && (
                         <Badge className="bg-success/10 text-success border-0">
                           <Shield className="mr-1 h-3 w-3" /> Doğrulanmış
                         </Badge>
                       )}
-                      <Badge variant="outline">{categoryLabels[profile.category]} Arıyor</Badge>
+                      <Badge variant="outline">{categoryLabels[listing.category]} Arıyor</Badge>
                     </div>
-                    <p className="text-muted-foreground">{profile.age} yaş · {profile.city}, {profile.district}</p>
+                    <p className="text-muted-foreground">
+                      {profile.age ? `${profile.age} yaş` : ""}{listing.city ? ` · ${listing.city}` : ""}{listing.district ? `, ${listing.district}` : ""}
+                    </p>
                   </div>
                 </div>
-                <Button variant="hero" size="lg" className="gap-2">
-                  <MessageSquare className="h-4 w-4" />
-                  Mesaj Gönder
-                </Button>
+                {user?.id !== listing.user_id && (
+                  <Button variant="hero" size="lg" className="gap-2" onClick={handleMessage}>
+                    <MessageSquare className="h-4 w-4" />
+                    Mesaj Gönder
+                  </Button>
+                )}
               </div>
             </div>
 
-            {/* Description */}
             <div className="rounded-2xl bg-card p-6 shadow-card">
               <h2 className="mb-3 font-display text-lg font-semibold text-foreground">Hakkında</h2>
-              <p className="text-muted-foreground leading-relaxed">{profile.description}</p>
+              <p className="text-muted-foreground leading-relaxed">{listing.description || profile.bio || "Açıklama eklenmemiş."}</p>
             </div>
 
-            {/* Preferences */}
-            <div className="rounded-2xl bg-card p-6 shadow-card">
-              <h2 className="mb-3 font-display text-lg font-semibold text-foreground">Aranan Özellikler</h2>
-              <div className="flex flex-wrap gap-2">
-                {profile.preferences.map((pref: string) => (
-                  <Badge key={pref} variant="outline" className="px-3 py-1.5 text-sm">
-                    {pref}
-                  </Badge>
-                ))}
+            {listing.preferences && listing.preferences.length > 0 && (
+              <div className="rounded-2xl bg-card p-6 shadow-card">
+                <h2 className="mb-3 font-display text-lg font-semibold text-foreground">Aranan Özellikler</h2>
+                <div className="flex flex-wrap gap-2">
+                  {listing.preferences.map((pref: string) => (
+                    <Badge key={pref} variant="outline" className="px-3 py-1.5 text-sm">{pref}</Badge>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Similar Profiles Hint */}
             <div className="rounded-2xl bg-muted/50 p-6">
               <h3 className="mb-2 font-display font-semibold text-foreground">Benzer Profiller</h3>
               <p className="mb-3 text-sm text-muted-foreground">
                 Bu profile benzer daha fazla arayan görmek ister misiniz?
               </p>
-              <Link to={`/ara/${profile.category}`}>
+              <Link to={`/ara/${listing.category}`}>
                 <Button variant="outline" size="sm">Tüm Profilleri Gör</Button>
               </Link>
             </div>
           </motion.div>
 
-          {/* Sidebar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="space-y-6"
           >
-            {/* Budget */}
             <div className="rounded-2xl bg-card p-6 shadow-card">
               <h3 className="mb-4 font-display font-semibold text-foreground">Bütçe</h3>
               <div className="text-center">
-                <div className="font-display text-2xl font-bold text-accent">{profile.budget}</div>
+                <div className="font-display text-2xl font-bold text-accent">
+                  {formatBudget(listing.budget_min, listing.budget_max)}
+                </div>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {profile.category === "kiralik-ev" ? "Aylık kira bütçesi" :
-                   profile.category === "is-ariyorum" ? "Beklenen maaş aralığı" :
-                   profile.category === "hizmet" ? "Hizmet bütçesi" : "Toplam bütçe"}
+                  {listing.category === "kiralik-ev" ? "Aylık kira bütçesi" :
+                   listing.category === "is-ariyorum" ? "Beklenen maaş aralığı" :
+                   listing.category === "hizmet" ? "Hizmet bütçesi" : "Toplam bütçe"}
                 </p>
               </div>
             </div>
 
-            {/* Details */}
             <div className="rounded-2xl bg-card p-6 shadow-card">
               <h3 className="mb-4 font-display font-semibold text-foreground">Detaylar</h3>
               <div className="space-y-3 text-sm">
-                <DetailRow icon={Briefcase} label="Meslek" value={profile.job} />
-                <DetailRow icon={Building} label="Şirket" value={profile.company} />
+                {profile.job && <DetailRow icon={Briefcase} label="Meslek" value={profile.job} />}
+                {profile.company && <DetailRow icon={Building} label="Şirket" value={profile.company} />}
                 {profile.education && <DetailRow icon={GraduationCap} label="Eğitim" value={profile.education} />}
-                <DetailRow icon={Heart} label="Medeni Hal" value={profile.maritalStatus} />
-                <DetailRow icon={Baby} label="Çocuk" value={profile.hasChildren ? `${profile.childrenCount || "Var"}` : "Yok"} />
-                <DetailRow icon={Dog} label="Evcil Hayvan" value={profile.hasPet ? profile.petType || "Var" : "Yok"} />
+                {profile.marital_status && <DetailRow icon={Heart} label="Medeni Hal" value={profile.marital_status} />}
+                <DetailRow icon={Baby} label="Çocuk" value={profile.has_children ? `${profile.children_count || "Var"}` : "Yok"} />
+                <DetailRow icon={Dog} label="Evcil Hayvan" value={profile.has_pet ? profile.pet_type || "Var" : "Yok"} />
                 {profile.income && <DetailRow icon={Wallet} label="Gelir" value={profile.income} />}
-                {profile.movingDate && <DetailRow icon={Calendar} label="Taşınma" value={profile.movingDate} />}
-                {profile.references !== undefined && (
-                  <DetailRow icon={User} label="Referans" value={profile.references ? "Mevcut" : "Yok"} />
+                {listing.moving_date && <DetailRow icon={Calendar} label="Taşınma" value={listing.moving_date} />}
+                {profile.has_references !== null && (
+                  <DetailRow icon={User} label="Referans" value={profile.has_references ? "Mevcut" : "Yok"} />
                 )}
-                {profile.smoking !== undefined && (
+                {profile.smoking !== null && (
                   <DetailRow icon={Cigarette} label="Sigara" value={profile.smoking ? "Evet" : "Hayır"} />
                 )}
               </div>
             </div>
 
-            {/* Contact CTA */}
-            <div className="rounded-2xl bg-gradient-accent p-6 text-center text-accent-foreground">
-              <h3 className="mb-2 font-display font-semibold">İletişime Geç</h3>
-              <p className="mb-4 text-sm text-accent-foreground/80">
-                Bu kişiyle mesajlaşmak için giriş yapın
-              </p>
-              <Link to="/giris">
-                <Button variant="hero-outline" className="w-full border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10">
-                  Giriş Yap
-                </Button>
-              </Link>
-            </div>
+            {user?.id !== listing.user_id && (
+              <div className="rounded-2xl bg-gradient-accent p-6 text-center text-accent-foreground">
+                <h3 className="mb-2 font-display font-semibold">İletişime Geç</h3>
+                <p className="mb-4 text-sm text-accent-foreground/80">
+                  {user ? "Bu kişiyle mesajlaşın" : "Bu kişiyle mesajlaşmak için giriş yapın"}
+                </p>
+                {user ? (
+                  <Button variant="hero-outline" className="w-full border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10" onClick={handleMessage}>
+                    Mesaj Gönder
+                  </Button>
+                ) : (
+                  <Link to="/giris">
+                    <Button variant="hero-outline" className="w-full border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10">
+                      Giriş Yap
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            )}
 
-            {/* Profile Meta */}
             <div className="rounded-xl border p-4 text-xs text-muted-foreground">
-              <p>Profil oluşturulma: {profile.createdAt}</p>
-              <p>Profil ID: #{profile.id}</p>
+              <p>Profil oluşturulma: {timeAgo}</p>
             </div>
           </motion.div>
         </div>

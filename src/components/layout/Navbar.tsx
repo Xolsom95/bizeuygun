@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut, LayoutDashboard, MessageSquare } from "lucide-react";
+import NotificationBell from "@/components/NotificationBell";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
@@ -93,6 +94,7 @@ const Navbar = () => {
 
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
+          <NotificationBell />
           <Link to="/profil-olustur">
             <Button variant="hero" size="sm">CV Oluştur</Button>
           </Link>
