@@ -94,6 +94,7 @@ const Navbar = () => {
 
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
+          <NotificationBell />
           <Link to="/profil-olustur">
             <Button variant="hero" size="sm">CV Oluştur</Button>
           </Link>
