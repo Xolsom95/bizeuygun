@@ -16,6 +16,7 @@ import Privacy from "./pages/Privacy";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Messages from "./pages/Messages";
+import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/gizlilik" element={<Privacy />} />
             <Route path="/giris" element={<Auth />} />
             <Route path="/panel" element={<Dashboard />} />
+            <Route path="/profil-duzenle" element={<EditProfile />} />
             <Route path="/mesajlar" element={<Messages />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

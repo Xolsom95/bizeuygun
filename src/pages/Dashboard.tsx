@@ -166,6 +166,11 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="flex gap-2">
+              <Link to="/profil-duzenle">
+                <Button variant="outline" className="gap-2">
+                  <Edit className="h-4 w-4" /> Profili Düzenle
+                </Button>
+              </Link>
               <Link to="/profil-olustur">
                 <Button variant="hero" className="gap-2">
                   <Plus className="h-4 w-4" /> Yeni İlan
