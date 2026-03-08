@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut } from "lucide-react";
+import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut, LayoutDashboard, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
@@ -113,8 +113,13 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem asChild>
-                  <Link to="/profil-olustur" className="flex items-center gap-2">
-                    <User className="h-4 w-4" /> Profilim
+                  <Link to="/panel" className="flex items-center gap-2">
+                    <LayoutDashboard className="h-4 w-4" /> Panelim
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/mesajlar" className="flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" /> Mesajlar
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -166,9 +171,21 @@ const Navbar = () => {
                   <Button variant="hero" className="w-full">CV Oluştur</Button>
                 </Link>
                 {user ? (
-                  <Button variant="ghost" className="w-full gap-2" onClick={() => { handleSignOut(); setMobileOpen(false); }}>
-                    <LogOut className="h-4 w-4" /> Çıkış Yap
-                  </Button>
+                  <>
+                    <Link to="/panel" onClick={() => setMobileOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <LayoutDashboard className="h-4 w-4" /> Panelim
+                      </Button>
+                    </Link>
+                    <Link to="/mesajlar" onClick={() => setMobileOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <MessageSquare className="h-4 w-4" /> Mesajlar
+                      </Button>
+                    </Link>
+                    <Button variant="ghost" className="w-full justify-start gap-2 text-destructive" onClick={() => { handleSignOut(); setMobileOpen(false); }}>
+                      <LogOut className="h-4 w-4" /> Çıkış Yap
+                    </Button>
+                  </>
                 ) : (
                   <Link to="/giris" onClick={() => setMobileOpen(false)}>
                     <Button variant="ghost" className="w-full gap-2">
