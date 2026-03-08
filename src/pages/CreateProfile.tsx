@@ -72,7 +72,6 @@ const CreateProfile = () => {
   const getBudgetLabel = () => {
     if (category === "kiralik-ev") return "Aylık Kira Bütçesi";
     if (category === "is-ariyorum") return "Beklenen Maaş Aralığı";
-    if (category === "hizmet") return "Hizmet Bütçesi";
     return "Toplam Bütçe";
   };
 
