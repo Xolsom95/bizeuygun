@@ -92,7 +92,7 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
       setLoading(true);
       let query = supabase
         .from("listings")
-        .select("*, profile:profiles!listings_user_id_fkey(name, age, job, marital_status, has_children, children_count, has_pet, pet_type, avatar_url)")
+        .select("*")
         .eq("category", selectedCategory)
         .eq("is_active", true);
 
@@ -102,6 +102,44 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
       if (verifiedOnly) {
         query = query.eq("verified", true);
       }
+      if (sortBy === "budget-asc") {
+        query = query.order("budget_min", { ascending: true, nullsFirst: false });
+      } else if (sortBy === "budget-desc") {
+        query = query.order("budget_max", { ascending: false, nullsFirst: false });
+      } else {
+        query = query.order("created_at", { ascending: false });
+      }
+
+      const { data: listingsData, error } = await query;
+
+      if (!error && listingsData) {
+        // Fetch profiles for all listing user_ids
+        const userIds = [...new Set(listingsData.map((l) => l.user_id))];
+        const { data: profilesData } = userIds.length > 0
+          ? await supabase.from("profiles").select("user_id, name, age, job, marital_status, has_children, children_count, has_pet, pet_type, avatar_url").in("user_id", userIds)
+          : { data: [] };
+
+        const profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+
+        let results: ListingWithProfile[] = listingsData.map((l) => ({
+          ...l,
+          profile: profileMap.get(l.user_id) || null,
+        }));
+
+        if (searchName) {
+          results = results.filter(
+            (l) => l.profile?.name?.toLowerCase().includes(searchName.toLowerCase())
+          );
+        }
+        setListings(results);
+      } else {
+        setListings([]);
+      }
+      setLoading(false);
+    };
+
+    fetchListings();
+  }, [selectedCategory, searchCity, searchName, sortBy, verifiedOnly]);
       if (sortBy === "budget-asc") {
         query = query.order("budget_min", { ascending: true, nullsFirst: false });
       } else if (sortBy === "budget-desc") {
