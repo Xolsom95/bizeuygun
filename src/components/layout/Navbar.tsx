@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut, LayoutDashboard, MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
