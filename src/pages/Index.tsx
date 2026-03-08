@@ -126,7 +126,7 @@ const Index = () => {
           <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M0 60V30C240 0 480 0 720 30C960 60 1200 60 1440 30V60H0Z"
-              fill="hsl(220, 20%, 97%)"
+              className="fill-background"
             />
           </svg>
         </div>
