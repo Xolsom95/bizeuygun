@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Home, Building2, Car, ArrowRight, Search, UserCheck, MessageSquare,
-  Shield, Users, TrendingUp, Briefcase, Star,
-  Quote, CheckCircle, Zap, Globe,
+  Shield, Users, TrendingUp, Briefcase,
+  CheckCircle, Zap, Globe,
 } from "lucide-react";
 import heroIllustration from "@/assets/hero-illustration.png";
 import Navbar from "@/components/layout/Navbar";
@@ -26,32 +26,12 @@ const steps = [
 ];
 
 const stats = [
-  { value: "12.000+", label: "Aktif Profil" },
-  { value: "25.000+", label: "Başarılı Eşleşme" },
+  { value: "4", label: "Kategori" },
   { value: "81", label: "Şehir" },
-  { value: "%96", label: "Memnuniyet" },
+  { value: "%100", label: "Ücretsiz" },
+  { value: "7/24", label: "Erişim" },
 ];
 
-const testimonials = [
-  {
-    name: "Mehmet K.",
-    role: "Ev Sahibi",
-    text: "Kiracı bulmak hiç bu kadar kolay olmamıştı. Profilleri inceledim, en uygun kiracıyı seçtim. 2 günde anlaştık.",
-    rating: 5,
-  },
-  {
-    name: "Aylin T.",
-    role: "Kiracı",
-    text: "CV'mi oluşturdum, 3 gün içinde 5 ev sahibi bana ulaştı. En uygun teklifi değerlendirdim.",
-    rating: 5,
-  },
-  {
-    name: "Serkan B.",
-    role: "Araç Satıcısı",
-    text: "Arabamı satmak istiyordum, bütçesi uygun alıcıları filtreledim ve hemen iletişime geçtim. Harika platform!",
-    rating: 5,
-  },
-];
 
 const advantages = [
   { icon: Zap, title: "Hızlı Eşleşme", desc: "Doğru alıcıyı anında bul. Zaman kaybetme." },
@@ -156,7 +136,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
             <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Kategorilere Göz At</h2>
-            <p className="text-muted-foreground">4 farklı kategoride binlerce arayan profili</p>
+            <p className="text-muted-foreground">4 farklı kategoride profilini oluştur, teklifler sana gelsin</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -328,40 +308,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
-            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Kullanıcılarımız Ne Diyor?</h2>
-            <p className="text-muted-foreground">Başarılı eşleşme hikayeleri</p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="rounded-2xl bg-card p-6 shadow-card"
-              >
-                <Quote className="mb-3 h-8 w-8 text-accent/30" />
-                <p className="mb-4 text-muted-foreground">{t.text}</p>
-                <div className="flex items-center gap-2">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 fill-accent text-accent" />
-                  ))}
-                </div>
-                <div className="mt-3 border-t pt-3">
-                  <p className="font-semibold text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Trust + CTA */}
       <section className="py-16">
