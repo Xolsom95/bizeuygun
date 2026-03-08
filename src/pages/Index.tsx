@@ -308,40 +308,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
-            <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Kullanıcılarımız Ne Diyor?</h2>
-            <p className="text-muted-foreground">Başarılı eşleşme hikayeleri</p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="rounded-2xl bg-card p-6 shadow-card"
-              >
-                <Quote className="mb-3 h-8 w-8 text-accent/30" />
-                <p className="mb-4 text-muted-foreground">{t.text}</p>
-                <div className="flex items-center gap-2">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 fill-accent text-accent" />
-                  ))}
-                </div>
-                <div className="mt-3 border-t pt-3">
-                  <p className="font-semibold text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Trust + CTA */}
       <section className="py-16">
