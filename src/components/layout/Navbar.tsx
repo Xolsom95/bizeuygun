@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut, LayoutDashboard, MessageSquare } from "lucide-react";
+import { Menu, X, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut, LayoutDashboard, MessageSquare } from "lucide-react";
+import logo from "@/assets/logo.png";
 import NotificationBell from "@/components/NotificationBell";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -48,9 +49,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-xl">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent">
-            <Search className="h-5 w-5 text-accent-foreground" />
-          </div>
+          <img src={logo} alt="BizeUygun" className="h-9 w-9 rounded-lg" />
           <span className="font-display text-xl font-bold text-foreground">
             Bize<span className="text-accent">Uygun</span>
           </span>

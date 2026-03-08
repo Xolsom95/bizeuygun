@@ -406,6 +406,25 @@ const Index = () => {
         </div>
       </section>
 
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "BizeUygun",
+            url: "https://bizeuygun.com",
+            description: "Türkiye'nin ilk ters ilan platformu. Arayanlar profilini oluşturur, satıcılar onları bulur.",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: "https://bizeuygun.com/ara/{search_term}",
+              "query-input": "required name=search_term",
+            },
+          }),
+        }}
+      />
+
       <Footer />
     </div>
   );
