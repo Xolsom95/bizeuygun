@@ -32,26 +32,6 @@ const stats = [
   { value: "7/24", label: "Erişim" },
 ];
 
-const testimonials = [
-  {
-    name: "Mehmet K.",
-    role: "Ev Sahibi",
-    text: "Kiracı bulmak hiç bu kadar kolay olmamıştı. Profilleri inceledim, en uygun kiracıyı seçtim. 2 günde anlaştık.",
-    rating: 5,
-  },
-  {
-    name: "Aylin T.",
-    role: "Kiracı",
-    text: "CV'mi oluşturdum, 3 gün içinde 5 ev sahibi bana ulaştı. En uygun teklifi değerlendirdim.",
-    rating: 5,
-  },
-  {
-    name: "Serkan B.",
-    role: "Araç Satıcısı",
-    text: "Arabamı satmak istiyordum, bütçesi uygun alıcıları filtreledim ve hemen iletişime geçtim. Harika platform!",
-    rating: 5,
-  },
-];
 
 const advantages = [
   { icon: Zap, title: "Hızlı Eşleşme", desc: "Doğru alıcıyı anında bul. Zaman kaybetme." },
