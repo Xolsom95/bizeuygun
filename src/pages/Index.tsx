@@ -230,7 +230,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
             <h2 className="mb-3 font-display text-3xl font-bold text-foreground">Nasıl Çalışır?</h2>
-            <p className="text-muted-foreground">3 adımda aradığını bul</p>
+            <p className="text-muted-foreground">3 adımda aradığın şey seni bulsun</p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
