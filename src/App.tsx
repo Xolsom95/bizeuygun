@@ -45,6 +45,7 @@ const App = () => (
             <Route path="/gizlilik" element={<Privacy />} />
             <Route path="/giris" element={<Auth />} />
             <Route path="/panel" element={<Dashboard />} />
+            <Route path="/profil-duzenle" element={<EditProfile />} />
             <Route path="/mesajlar" element={<Messages />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
