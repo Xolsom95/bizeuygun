@@ -26,10 +26,10 @@ const steps = [
 ];
 
 const stats = [
-  { value: "12.000+", label: "Aktif Profil" },
-  { value: "25.000+", label: "Başarılı Eşleşme" },
+  { value: "4", label: "Kategori" },
   { value: "81", label: "Şehir" },
-  { value: "%96", label: "Memnuniyet" },
+  { value: "%100", label: "Ücretsiz" },
+  { value: "7/24", label: "Erişim" },
 ];
 
 const testimonials = [
