@@ -415,7 +415,7 @@ const Index = () => {
             "@type": "WebSite",
             name: "BizeUygun",
             url: "https://bizeuygun.com",
-            description: "Türkiye'nin ilk ters ilan platformu. Arayanlar profilini oluşturur, satıcılar onları bulur.",
+            description: "Türkiye'nin ilk ters ilan platformu. Aradığın şey seni bulsun.",
             potentialAction: {
               "@type": "SearchAction",
               target: "https://bizeuygun.com/ara/{search_term}",
