@@ -23,9 +23,12 @@ const Footer = () => {
           <div>
             <h4 className="font-display font-semibold mb-3">Kategoriler</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/70">
-              <li><Link to="/ara/kiralik-ev" className="hover:text-accent transition-colors">Kiralık Ev Arayanlar</Link></li>
-              <li><Link to="/ara/satilik-ev" className="hover:text-accent transition-colors">Satılık Ev Arayanlar</Link></li>
-              <li><Link to="/ara/arac" className="hover:text-accent transition-colors">Araç Arayanlar</Link></li>
+              <li><Link to="/ara/kiralik-ev" className="hover:text-accent transition-colors">Kiralık Ev</Link></li>
+              <li><Link to="/ara/satilik-ev" className="hover:text-accent transition-colors">Satılık Ev</Link></li>
+              <li><Link to="/ara/arac" className="hover:text-accent transition-colors">Araç</Link></li>
+              <li><Link to="/ara/is-ariyorum" className="hover:text-accent transition-colors">İş Arayanlar</Link></li>
+              <li><Link to="/ara/ikinci-el" className="hover:text-accent transition-colors">İkinci El</Link></li>
+              <li><Link to="/ara/hizmet" className="hover:text-accent transition-colors">Hizmet</Link></li>
             </ul>
           </div>
 
@@ -34,16 +37,16 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-primary-foreground/70">
               <li><Link to="/nasil-calisir" className="hover:text-accent transition-colors">Nasıl Çalışır?</Link></li>
               <li><Link to="/profil-olustur" className="hover:text-accent transition-colors">CV Oluştur</Link></li>
-              <li><Link to="/giris" className="hover:text-accent transition-colors">Giriş Yap</Link></li>
+              <li><Link to="/hakkimizda" className="hover:text-accent transition-colors">Hakkımızda</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-display font-semibold mb-3">Destek</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/70">
-              <li><Link to="/hakkimizda" className="hover:text-accent transition-colors">Hakkımızda</Link></li>
               <li><Link to="/iletisim" className="hover:text-accent transition-colors">İletişim</Link></li>
               <li><Link to="/gizlilik" className="hover:text-accent transition-colors">Gizlilik Politikası</Link></li>
+              <li><Link to="/giris" className="hover:text-accent transition-colors">Giriş Yap</Link></li>
             </ul>
           </div>
         </div>
