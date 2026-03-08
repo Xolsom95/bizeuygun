@@ -56,7 +56,7 @@ const sellerSteps = [
 
 const faqs = [
   {
-    q: "BulBeni ücretsiz mi?",
+    q: "BizeUygun ücretsiz mi?",
     a: "Profil oluşturmak tamamen ücretsiz. Öne çıkma ve premium özellikler için paketlerimizi inceleyebilirsiniz.",
   },
   {

@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 const sections = [
   {
     title: "1. Toplanan Veriler",
-    content: "BulBeni olarak, profil oluşturma sürecinde sağladığınız kişisel bilgileri (ad soyad, yaş, meslek, medeni hal, bütçe tercihleri vb.) toplarız. Ayrıca site kullanımınıza ilişkin anonim istatistiksel veriler toplanabilir.",
+    content: "BizeUygun olarak, profil oluşturma sürecinde sağladığınız kişisel bilgileri (ad soyad, yaş, meslek, medeni hal, bütçe tercihleri vb.) toplarız. Ayrıca site kullanımınıza ilişkin anonim istatistiksel veriler toplanabilir.",
   },
   {
     title: "2. Verilerin Kullanımı",
@@ -25,7 +25,7 @@ const sections = [
   },
   {
     title: "6. Kullanıcı Hakları",
-    content: "KVKK kapsamında kişisel verilerinize erişim, düzeltme, silme ve taşıma haklarına sahipsiniz. Bu haklarınızı kullanmak için destek@bulbeni.com adresine başvurabilirsiniz.",
+    content: "KVKK kapsamında kişisel verilerinize erişim, düzeltme, silme ve taşıma haklarına sahipsiniz. Bu haklarınızı kullanmak için destek@bizeuygun.com adresine başvurabilirsiniz.",
   },
   {
     title: "7. Veri Saklama Süresi",

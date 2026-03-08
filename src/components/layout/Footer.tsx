@@ -12,7 +12,7 @@ const Footer = () => {
                 <Search className="h-5 w-5 text-accent-foreground" />
               </div>
               <span className="font-display text-xl font-bold">
-                Bul<span className="text-accent">Beni</span>
+                Bize<span className="text-accent">Uygun</span>
               </span>
             </div>
             <p className="text-sm text-primary-foreground/70">
@@ -52,7 +52,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 border-t border-primary-foreground/10 pt-6 text-center text-sm text-primary-foreground/50">
-          © {new Date().getFullYear()} BulBeni. Tüm hakları saklıdır.
+          © {new Date().getFullYear()} BizeUygun. Tüm hakları saklıdır.
         </div>
       </div>
     </footer>
