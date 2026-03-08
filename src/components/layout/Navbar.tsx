@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown } from "lucide-react";
+import { Menu, X, Search, User, Home, Car, Building2, Briefcase, ShoppingBag, Wrench, ChevronDown, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   { to: "/ara/kiralik-ev", label: "Kiralık Ev", icon: Home },
@@ -28,6 +31,17 @@ const allLinks = [...navLinks, ...moreLinks];
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const userInitials = user?.user_metadata?.full_name
+    ? user.user_metadata.full_name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+    : user?.email?.[0]?.toUpperCase() || "U";
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-xl">
@@ -47,11 +61,7 @@ const Navbar = () => {
             const isActive = location.pathname.startsWith(link.to);
             return (
               <Link key={link.to} to={link.to}>
-                <Button
-                  variant={isActive ? "secondary" : "ghost"}
-                  size="sm"
-                  className="gap-2"
-                >
+                <Button variant={isActive ? "secondary" : "ghost"} size="sm" className="gap-2">
                   <Icon className="h-4 w-4" />
                   {link.label}
                 </Button>
@@ -84,24 +94,48 @@ const Navbar = () => {
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
           <Link to="/profil-olustur">
-            <Button variant="hero" size="sm">
-              CV Oluştur
-            </Button>
+            <Button variant="hero" size="sm">CV Oluştur</Button>
           </Link>
-          <Link to="/giris">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <User className="h-4 w-4" />
-              Giriş Yap
-            </Button>
-          </Link>
+
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <Avatar className="h-7 w-7">
+                    <AvatarFallback className="bg-accent/10 text-accent text-xs font-bold">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="max-w-[100px] truncate text-sm">
+                    {user.user_metadata?.full_name || user.email}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild>
+                  <Link to="/profil-olustur" className="flex items-center gap-2">
+                    <User className="h-4 w-4" /> Profilim
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="text-destructive gap-2">
+                  <LogOut className="h-4 w-4" /> Çıkış Yap
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link to="/giris">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <User className="h-4 w-4" />
+                Giriş Yap
+              </Button>
+            </Link>
+          )}
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
           <ThemeToggle />
-          <button
-            className="text-foreground"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
+          <button className="text-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
@@ -131,12 +165,17 @@ const Navbar = () => {
                 <Link to="/profil-olustur" onClick={() => setMobileOpen(false)}>
                   <Button variant="hero" className="w-full">CV Oluştur</Button>
                 </Link>
-                <Link to="/giris" onClick={() => setMobileOpen(false)}>
-                  <Button variant="ghost" className="w-full gap-2">
-                    <User className="h-4 w-4" />
-                    Giriş Yap
+                {user ? (
+                  <Button variant="ghost" className="w-full gap-2" onClick={() => { handleSignOut(); setMobileOpen(false); }}>
+                    <LogOut className="h-4 w-4" /> Çıkış Yap
                   </Button>
-                </Link>
+                ) : (
+                  <Link to="/giris" onClick={() => setMobileOpen(false)}>
+                    <Button variant="ghost" className="w-full gap-2">
+                      <User className="h-4 w-4" /> Giriş Yap
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>
