@@ -63,27 +63,6 @@ const Navbar = () => {
               </Link>
             );
           })}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-1">
-                Daha Fazla <ChevronDown className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {moreLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <DropdownMenuItem key={link.to} asChild>
-                    <Link to={link.to} className="flex items-center gap-2">
-                      <Icon className="h-4 w-4" />
-                      {link.label}
-                    </Link>
-                  </DropdownMenuItem>
-                );
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
