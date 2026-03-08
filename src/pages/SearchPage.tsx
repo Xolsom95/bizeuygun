@@ -140,32 +140,7 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
 
     fetchListings();
   }, [selectedCategory, searchCity, searchName, sortBy, verifiedOnly]);
-      if (sortBy === "budget-asc") {
-        query = query.order("budget_min", { ascending: true, nullsFirst: false });
-      } else if (sortBy === "budget-desc") {
-        query = query.order("budget_max", { ascending: false, nullsFirst: false });
-      } else {
-        query = query.order("created_at", { ascending: false });
-      }
 
-      const { data, error } = await query;
-
-      if (!error && data) {
-        let results = data as unknown as ListingWithProfile[];
-        if (searchName) {
-          results = results.filter(
-            (l) => l.profile?.name?.toLowerCase().includes(searchName.toLowerCase())
-          );
-        }
-        setListings(results);
-      } else {
-        setListings([]);
-      }
-      setLoading(false);
-    };
-
-    fetchListings();
-  }, [selectedCategory, searchCity, searchName, sortBy, verifiedOnly]);
 
   const formatBudget = (min: number | null, max: number | null) => {
     if (!min && !max) return "Belirtilmedi";
