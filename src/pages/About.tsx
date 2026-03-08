@@ -34,7 +34,7 @@ const About = () => {
             Hakkımızda
           </motion.h1>
           <p className="mx-auto max-w-2xl text-lg text-primary-foreground/75">
-            BulBeni, geleneksel ilan anlayışını tersine çeviren Türkiye'nin ilk ters ilan platformudur.
+            BizeUygun, geleneksel ilan anlayışını tersine çeviren Türkiye'nin ilk ters ilan platformudur.
           </p>
         </div>
       </section>
