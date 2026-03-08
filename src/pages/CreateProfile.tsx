@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,16 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Home, Building2, Car, ArrowRight, ArrowLeft, User, MapPin, Briefcase, ShoppingBag, Wrench, CheckCircle } from "lucide-react";
+import { Home, Building2, Car, ArrowRight, ArrowLeft, User, MapPin, Briefcase, ShoppingBag, Wrench, CheckCircle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const categoryOptions = [
   { value: "kiralik-ev", label: "Kiralık Ev Arıyorum", icon: Home },
@@ -36,9 +36,34 @@ const featuresByCategory: Record<string, string[]> = {
 };
 
 const CreateProfile = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [saving, setSaving] = useState(false);
   const [category, setCategory] = useState("");
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+
+  // Form fields
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [job, setJob] = useState("");
+  const [company, setCompany] = useState("");
+  const [education, setEducation] = useState("");
+  const [income, setIncome] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [childrenCount, setChildrenCount] = useState("");
+  const [hasPet, setHasPet] = useState(false);
+  const [smoking, setSmoking] = useState(false);
+  const [hasReferences, setHasReferences] = useState(false);
+
+  // Step 3 fields
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+  const [budgetMin, setBudgetMin] = useState("");
+  const [budgetMax, setBudgetMax] = useState("");
+  const [movingDate, setMovingDate] = useState("");
+  const [experience, setExperience] = useState("");
+  const [description, setDescription] = useState("");
 
   const getFeatures = () => featuresByCategory[category] || [];
 
@@ -56,11 +81,67 @@ const CreateProfile = () => {
   };
 
   const getBudgetPlaceholder = (type: "min" | "max") => {
-    if (category === "kiralik-ev") return type === "min" ? "8.000 ₺" : "15.000 ₺";
-    if (category === "is-ariyorum") return type === "min" ? "25.000 ₺" : "50.000 ₺";
-    if (category === "ikinci-el") return type === "min" ? "1.000 ₺" : "10.000 ₺";
-    if (category === "hizmet") return type === "min" ? "2.000 ₺" : "10.000 ₺";
-    return type === "min" ? "500.000 ₺" : "1.500.000 ₺";
+    if (category === "kiralik-ev") return type === "min" ? "8000" : "15000";
+    if (category === "is-ariyorum") return type === "min" ? "25000" : "50000";
+    if (category === "ikinci-el") return type === "min" ? "1000" : "10000";
+    if (category === "hizmet") return type === "min" ? "2000" : "10000";
+    return type === "min" ? "500000" : "1500000";
+  };
+
+  const handlePublish = async () => {
+    if (!user) {
+      toast.error("Lütfen önce giriş yapın");
+      navigate("/giris");
+      return;
+    }
+
+    setSaving(true);
+
+    // Update profile with personal info
+    const { error: profileError } = await supabase.from("profiles").update({
+      name: name || undefined,
+      age: age ? Number(age) : null,
+      job: job || null,
+      company: company || null,
+      education: education || null,
+      income: income || null,
+      marital_status: maritalStatus || null,
+      children_count: childrenCount ? Number(childrenCount) : null,
+      has_pet: hasPet,
+      smoking,
+      has_references: hasReferences,
+      city: city || null,
+      district: district || null,
+    }).eq("user_id", user.id);
+
+    if (profileError) {
+      toast.error("Profil güncellenemedi");
+      setSaving(false);
+      return;
+    }
+
+    // Create listing
+    const { error: listingError } = await supabase.from("listings").insert({
+      user_id: user.id,
+      category,
+      city: city || null,
+      district: district || null,
+      budget_min: budgetMin ? Number(budgetMin) : null,
+      budget_max: budgetMax ? Number(budgetMax) : null,
+      moving_date: movingDate || null,
+      experience: experience || null,
+      preferences: selectedFeatures.length > 0 ? selectedFeatures : null,
+      description: description || null,
+    });
+
+    setSaving(false);
+
+    if (listingError) {
+      toast.error("İlan oluşturulamadı");
+    } else {
+      setStep(4);
+      toast.success("İlan başarıyla oluşturuldu!");
+    }
   };
 
   return (
@@ -139,34 +220,32 @@ const CreateProfile = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <Label>Ad Soyad</Label>
-                  <Input placeholder="Ahmet Yılmaz" className="mt-1" />
+                  <Input placeholder="Ahmet Yılmaz" className="mt-1" value={name} onChange={e => setName(e.target.value)} />
                 </div>
                 <div>
                   <Label>Yaş</Label>
-                  <Input type="number" placeholder="30" className="mt-1" />
+                  <Input type="number" placeholder="30" className="mt-1" value={age} onChange={e => setAge(e.target.value)} />
                 </div>
                 <div>
                   <Label>Meslek</Label>
-                  <Input placeholder="Yazılım Mühendisi" className="mt-1" />
+                  <Input placeholder="Yazılım Mühendisi" className="mt-1" value={job} onChange={e => setJob(e.target.value)} />
                 </div>
                 <div>
                   <Label>Şirket / İşyeri</Label>
-                  <Input placeholder="TechCorp" className="mt-1" />
+                  <Input placeholder="TechCorp" className="mt-1" value={company} onChange={e => setCompany(e.target.value)} />
                 </div>
                 <div>
                   <Label>Eğitim</Label>
-                  <Input placeholder="Bilgisayar Müh., İTÜ" className="mt-1" />
+                  <Input placeholder="Bilgisayar Müh., İTÜ" className="mt-1" value={education} onChange={e => setEducation(e.target.value)} />
                 </div>
                 <div>
                   <Label>Aylık Gelir (Opsiyonel)</Label>
-                  <Input placeholder="25.000 ₺+" className="mt-1" />
+                  <Input placeholder="25.000 ₺+" className="mt-1" value={income} onChange={e => setIncome(e.target.value)} />
                 </div>
                 <div>
                   <Label>Medeni Hal</Label>
-                  <Select>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Seçiniz" />
-                    </SelectTrigger>
+                  <Select value={maritalStatus} onValueChange={setMaritalStatus}>
+                    <SelectTrigger className="mt-1"><SelectValue placeholder="Seçiniz" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="bekar">Bekar</SelectItem>
                       <SelectItem value="evli">Evli</SelectItem>
@@ -176,21 +255,21 @@ const CreateProfile = () => {
                 </div>
                 <div>
                   <Label>Çocuk Sayısı</Label>
-                  <Input type="number" placeholder="0" className="mt-1" />
+                  <Input type="number" placeholder="0" className="mt-1" value={childrenCount} onChange={e => setChildrenCount(e.target.value)} />
                 </div>
               </div>
 
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <Checkbox id="pet" />
+                  <Checkbox id="pet" checked={hasPet} onCheckedChange={v => setHasPet(!!v)} />
                   <Label htmlFor="pet">Evcil hayvanım var</Label>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Checkbox id="smoke" />
+                  <Checkbox id="smoke" checked={smoking} onCheckedChange={v => setSmoking(!!v)} />
                   <Label htmlFor="smoke">Sigara kullanıyorum</Label>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Checkbox id="reference" />
+                  <Checkbox id="reference" checked={hasReferences} onCheckedChange={v => setHasReferences(!!v)} />
                   <Label htmlFor="reference">Referanslarım mevcut</Label>
                 </div>
               </div>
@@ -218,27 +297,25 @@ const CreateProfile = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <Label>Şehir</Label>
-                  <Input placeholder="İstanbul" className="mt-1" />
+                  <Input placeholder="İstanbul" className="mt-1" value={city} onChange={e => setCity(e.target.value)} />
                 </div>
                 <div>
                   <Label>İlçe(ler)</Label>
-                  <Input placeholder="Kadıköy, Beşiktaş" className="mt-1" />
+                  <Input placeholder="Kadıköy, Beşiktaş" className="mt-1" value={district} onChange={e => setDistrict(e.target.value)} />
                 </div>
                 <div>
                   <Label>Minimum {getBudgetLabel()}</Label>
-                  <Input placeholder={getBudgetPlaceholder("min")} className="mt-1" />
+                  <Input type="number" placeholder={getBudgetPlaceholder("min")} className="mt-1" value={budgetMin} onChange={e => setBudgetMin(e.target.value)} />
                 </div>
                 <div>
                   <Label>Maksimum {getBudgetLabel()}</Label>
-                  <Input placeholder={getBudgetPlaceholder("max")} className="mt-1" />
+                  <Input type="number" placeholder={getBudgetPlaceholder("max")} className="mt-1" value={budgetMax} onChange={e => setBudgetMax(e.target.value)} />
                 </div>
                 {(category === "kiralik-ev" || category === "satilik-ev") && (
                   <div>
                     <Label>Taşınma Zamanı</Label>
-                    <Select>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Seçiniz" />
-                      </SelectTrigger>
+                    <Select value={movingDate} onValueChange={setMovingDate}>
+                      <SelectTrigger className="mt-1"><SelectValue placeholder="Seçiniz" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="hemen">Hemen</SelectItem>
                         <SelectItem value="1ay">1 ay içinde</SelectItem>
@@ -251,10 +328,8 @@ const CreateProfile = () => {
                 {category === "is-ariyorum" && (
                   <div>
                     <Label>Deneyim Süresi</Label>
-                    <Select>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Seçiniz" />
-                      </SelectTrigger>
+                    <Select value={experience} onValueChange={setExperience}>
+                      <SelectTrigger className="mt-1"><SelectValue placeholder="Seçiniz" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="0-1">0-1 yıl</SelectItem>
                         <SelectItem value="1-3">1-3 yıl</SelectItem>
@@ -292,6 +367,8 @@ const CreateProfile = () => {
                   className="mt-1"
                   rows={4}
                   placeholder="Kendinizi ve aradığınız şey hakkında detaylı bilgi verin..."
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
                 />
               </div>
 
@@ -299,7 +376,8 @@ const CreateProfile = () => {
                 <Button variant="ghost" onClick={() => setStep(2)} className="gap-2">
                   <ArrowLeft className="h-4 w-4" /> Geri
                 </Button>
-                <Button variant="hero" size="lg" className="gap-2" onClick={() => setStep(4)}>
+                <Button variant="hero" size="lg" className="gap-2" onClick={handlePublish} disabled={saving}>
+                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                   Önizle ve Yayınla <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
@@ -325,13 +403,13 @@ const CreateProfile = () => {
                 Teklif geldiğinde bildirim alacaksın.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <Link to="/profil/1">
+                <Link to="/panel">
                   <Button variant="hero" size="lg" className="gap-2">
-                    Profilimi Gör
+                    Panelime Git
                   </Button>
                 </Link>
                 <Button variant="outline" size="lg" onClick={() => { setStep(1); setCategory(""); setSelectedFeatures([]); }}>
-                  Yeni Profil Oluştur
+                  Yeni İlan Oluştur
                 </Button>
               </div>
             </div>
