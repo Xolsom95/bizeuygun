@@ -115,7 +115,7 @@ const Index = () => {
             >
               <img
                 src={heroIllustration}
-                alt="BulBeni ters ilan platformu illüstrasyonu"
+                alt="BizeUygun ters ilan platformu illüstrasyonu"
                 className="w-full max-w-lg mx-auto animate-float"
               />
             </motion.div>
