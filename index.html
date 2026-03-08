@@ -1,24 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- TODO: Set the document title to the name of your application -->
-    <title>Lovable App</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
-
-    <!-- TODO: Update og:title to match your application name -->
-    <meta property="og:title" content="Lovable App" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <title>BulBeni — Türkiye'nin İlk Ters İlan Platformu</title>
+    <meta name="description" content="Artık ilanı alıcı verir, satıcı bulur. Kiralık ev, satılık ev, araç, iş ve daha fazlası için profilini oluştur." />
+    <meta name="author" content="BulBeni" />
+    <meta property="og:title" content="BulBeni — Ters İlan Platformu" />
+    <meta property="og:description" content="Artık ilanı alıcı verir, satıcı bulur. Profilini oluştur, satıcılar seni bulsun." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
+    <meta name="twitter:site" content="@BulBeni" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <link rel="canonical" href="https://bulbeni.com" />
+    <script>
+      // Prevent FOUC for dark mode
+      (function() {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
-
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
