@@ -10,7 +10,9 @@ import {
 import heroIllustration from "@/assets/hero-illustration.png";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { mockProfiles } from "@/data/mockProfiles";
+import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
 
 const categories = [
   { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", count: 2847 },
