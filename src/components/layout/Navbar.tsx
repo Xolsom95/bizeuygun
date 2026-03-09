@@ -157,6 +157,11 @@ const Navbar = () => {
                         <LayoutDashboard className="h-4 w-4" /> Panelim
                       </Button>
                     </Link>
+                    <Link to="/favoriler" onClick={() => setMobileOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <Heart className="h-4 w-4" /> Favorilerim
+                      </Button>
+                    </Link>
                     <Link to="/mesajlar" onClick={() => setMobileOpen(false)}>
                       <Button variant="ghost" className="w-full justify-start gap-2">
                         <MessageSquare className="h-4 w-4" /> Mesajlar
