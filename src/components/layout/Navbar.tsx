@@ -93,6 +93,11 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link to="/favoriler" className="flex items-center gap-2">
+                    <Heart className="h-4 w-4" /> Favorilerim
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/mesajlar" className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" /> Mesajlar
                   </Link>
