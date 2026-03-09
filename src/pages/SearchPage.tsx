@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 
 const categoryConfig: Record<string, { label: string; icon: typeof Home; description: string }> = {
