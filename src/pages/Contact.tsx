@@ -17,7 +17,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
 const contactInfo = [
-  { icon: Mail, label: "E-posta", value: "destek@bizeuygun.com" },
+  { icon: Mail, label: "E-posta", value: "info@bizeuygun.com" },
   { icon: Phone, label: "Telefon", value: "+90 (212) 555 00 00" },
   { icon: MapPin, label: "Adres", value: "Levent, İstanbul, Türkiye" },
   { icon: Clock, label: "Çalışma Saatleri", value: "Pzt - Cum, 09:00 - 18:00" },
