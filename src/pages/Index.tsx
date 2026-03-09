@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -5,18 +6,18 @@ import { Badge } from "@/components/ui/badge";
 import {
   Home, Building2, Car, ArrowRight, Search, UserCheck, MessageSquare,
   Shield, Users, TrendingUp, Briefcase,
-  CheckCircle, Zap, Globe,
+  CheckCircle, Zap, Globe, Loader2,
 } from "lucide-react";
 import heroIllustration from "@/assets/hero-illustration.png";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { mockProfiles } from "@/data/mockProfiles";
+import { supabase } from "@/integrations/supabase/client";
 
 const categories = [
-  { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", count: 2847 },
-  { title: "Satılık Ev", description: "Alıcı profilleri ve kriterleri", icon: Building2, to: "/ara/satilik-ev", count: 1523 },
-  { title: "Satılık Araç", description: "Araç alıcı talepleri", icon: Car, to: "/ara/arac", count: 3291 },
-  { title: "İş Arayanlar", description: "Profesyonel CV'ler", icon: Briefcase, to: "/ara/is-ariyorum", count: 4120 },
+  { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", key: "kiralik-ev" },
+  { title: "Satılık Ev", description: "Alıcı profilleri ve kriterleri", icon: Building2, to: "/ara/satilik-ev", key: "satilik-ev" },
+  { title: "Satılık Araç", description: "Araç alıcı talepleri", icon: Car, to: "/ara/arac", key: "arac" },
+  { title: "İş Arayanlar", description: "Profesyonel CV'ler", icon: Briefcase, to: "/ara/is-ariyorum", key: "is-ariyorum" },
 ];
 
 const steps = [
@@ -40,10 +41,57 @@ const advantages = [
   { icon: CheckCircle, title: "Ücretsiz Kullanım", desc: "Profil oluşturmak tamamen ücretsiz." },
 ];
 
-// Recent profiles from mock data
-const recentProfiles = mockProfiles.slice(0, 6);
+const categoryLabels: Record<string, string> = {
+  "kiralik-ev": "Kiralık",
+  "satilik-ev": "Satılık",
+  "arac": "Araç",
+  "is-ariyorum": "İş",
+};
 
 const Index = () => {
+  const [recentListings, setRecentListings] = useState<any[]>([]);
+  const [loadingRecent, setLoadingRecent] = useState(true);
+  const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      setLoadingRecent(true);
+      const { data: listingsData } = await supabase
+        .from("listings")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(6);
+
+      if (listingsData && listingsData.length > 0) {
+        const userIds = [...new Set(listingsData.map((l) => l.user_id))];
+        const { data: profilesData } = await supabase
+          .from("profiles")
+          .select("user_id, name, age, job, avatar_url")
+          .in("user_id", userIds);
+        const profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+        setRecentListings(listingsData.map((l) => ({ ...l, profile: profileMap.get(l.user_id) || null })));
+      } else {
+        setRecentListings([]);
+      }
+      setLoadingRecent(false);
+    };
+
+    const fetchCounts = async () => {
+      for (const cat of categories) {
+        const { count } = await supabase
+          .from("listings")
+          .select("*", { count: "exact", head: true })
+          .eq("category", cat.key)
+          .eq("is_active", true);
+        setCategoryCounts((prev) => ({ ...prev, [cat.key]: count || 0 }));
+      }
+    };
+
+    fetchRecent();
+    fetchCounts();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -159,7 +207,7 @@ const Index = () => {
                       <p className="mb-3 text-sm text-muted-foreground">{cat.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-accent">
-                          {cat.count.toLocaleString("tr-TR")} profil
+                          {(categoryCounts[cat.key] || 0).toLocaleString("tr-TR")} profil
                         </span>
                         <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-accent" />
                       </div>
@@ -261,42 +309,68 @@ const Index = () => {
             </Link>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {recentProfiles.map((profile, i) => (
-              <motion.div
-                key={profile.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-              >
-                <Link to={`/profil/${profile.id}`}>
-                  <div className="group rounded-2xl bg-background p-5 shadow-card transition-all hover:shadow-card-hover hover:-translate-y-0.5">
-                    <div className="mb-3 flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 font-display text-sm font-bold text-accent">
-                        {profile.avatar}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-foreground truncate">{profile.name}</span>
-                          {profile.verified && (
-                            <Badge variant="secondary" className="text-xs bg-success/10 text-success border-0 shrink-0">✓</Badge>
-                          )}
+          {loadingRecent ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-accent" />
+            </div>
+          ) : recentListings.length === 0 ? (
+            <div className="rounded-2xl bg-background p-12 text-center shadow-card">
+              <p className="text-muted-foreground">Henüz profil eklenmemiş. İlk CV'yi sen oluştur!</p>
+              <Link to="/profil-olustur">
+                <Button variant="hero" size="sm" className="mt-4 gap-2">CV Oluştur <ArrowRight className="h-4 w-4" /></Button>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {recentListings.map((listing, i) => {
+                const profile = listing.profile;
+                const initials = profile?.name
+                  ? profile.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+                  : "?";
+                const formatBudget = (min: number | null, max: number | null) => {
+                  if (!min && !max) return "Belirtilmedi";
+                  const fmt = (n: number) => n.toLocaleString("tr-TR");
+                  if (min && max) return `${fmt(min)} - ${fmt(max)} ₺`;
+                  if (min) return `${fmt(min)} ₺+`;
+                  return `${fmt(max!)} ₺'ye kadar`;
+                };
+                return (
+                  <motion.div
+                    key={listing.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08 }}
+                  >
+                    <Link to={`/profil/${listing.id}`}>
+                      <div className="group rounded-2xl bg-background p-5 shadow-card transition-all hover:shadow-card-hover hover:-translate-y-0.5">
+                        <div className="mb-3 flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 font-display text-sm font-bold text-accent">
+                            {initials}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-foreground truncate">{profile?.name || "Anonim"}</span>
+                              {listing.verified && (
+                                <Badge variant="secondary" className="text-xs bg-success/10 text-success border-0 shrink-0">✓</Badge>
+                              )}
+                            </div>
+                            <p className="text-xs text-muted-foreground">{profile?.job || ""}{listing.city ? ` · ${listing.city}` : ""}</p>
+                          </div>
+                          <Badge variant="outline" className="text-xs shrink-0">{categoryLabels[listing.category] || listing.category}</Badge>
                         </div>
-                        <p className="text-xs text-muted-foreground">{profile.job} · {profile.city}</p>
+                        <p className="text-sm font-medium text-accent mb-2">{formatBudget(listing.budget_min, listing.budget_max)}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-2">{listing.description}</p>
+                        <div className="mt-3 flex items-center justify-end gap-1 text-xs font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
+                          İncele <ArrowRight className="h-3 w-3" />
+                        </div>
                       </div>
-                      <Badge variant="outline" className="text-xs shrink-0">{profile.category === "kiralik-ev" ? "Kiralık" : profile.category === "satilik-ev" ? "Satılık" : profile.category === "arac" ? "Araç" : profile.category === "is-ariyorum" ? "İş" : profile.category === "ikinci-el" ? "2. El" : "Hizmet"}</Badge>
-                    </div>
-                    <p className="text-sm font-medium text-accent mb-2">{profile.budget}</p>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{profile.description}</p>
-                    <div className="mt-3 flex items-center justify-end gap-1 text-xs font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
-                      İncele <ArrowRight className="h-3 w-3" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
 
           <div className="mt-6 text-center sm:hidden">
             <Link to="/ara/kiralik-ev">

@@ -128,10 +128,10 @@ const About = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
             {[
-              { value: "50+", label: "Şehir" },
-              { value: "7.600+", label: "Aktif Profil" },
-              { value: "15.000+", label: "Eşleşme" },
-              { value: "6", label: "Kategori" },
+              { value: "81", label: "Şehir" },
+              { value: "4", label: "Kategori" },
+              { value: "%100", label: "Ücretsiz" },
+              { value: "7/24", label: "Erişim" },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="font-display text-3xl font-bold text-accent">{s.value}</div>
