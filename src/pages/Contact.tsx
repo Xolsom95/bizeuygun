@@ -15,6 +15,7 @@ import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import SEO from "@/components/SEO";
 
 const contactInfo = [
   { icon: Mail, label: "E-posta", value: "info@bizeuygun.com" },
