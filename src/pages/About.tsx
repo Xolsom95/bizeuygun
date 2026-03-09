@@ -12,12 +12,7 @@ const values = [
   { icon: Zap, title: "Hız", desc: "Doğru eşleşme saniyeler içinde. Zaman kaybı yok." },
 ];
 
-const team = [
-  { name: "Ahmet Demir", role: "Kurucu & CEO", avatar: "AD" },
-  { name: "Selin Yıldız", role: "CTO", avatar: "SY" },
-  { name: "Murat Kara", role: "Ürün Müdürü", avatar: "MK" },
-  { name: "Zeynep Ak", role: "Pazarlama Direktörü", avatar: "ZA" },
-];
+const founder = { name: "Mehmet Samet Dalgıç", role: "Kurucu & CEO", avatar: "MSD" };
 
 const About = () => {
   return (
@@ -107,27 +102,23 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team */}
+      {/* Founder */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="mb-10 text-center font-display text-3xl font-bold text-foreground">Ekibimiz</h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {team.map((t, i) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="rounded-2xl bg-card p-6 text-center shadow-card"
-              >
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 font-display text-lg font-bold text-accent">
-                  {t.avatar}
-                </div>
-                <h3 className="font-display font-semibold text-foreground">{t.name}</h3>
-                <p className="text-sm text-muted-foreground">{t.role}</p>
-              </motion.div>
-            ))}
+          <h2 className="mb-10 text-center font-display text-3xl font-bold text-foreground">Kurucu</h2>
+          <div className="flex justify-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="rounded-2xl bg-card p-8 text-center shadow-card max-w-sm w-full"
+            >
+              <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-accent/10 font-display text-xl font-bold text-accent">
+                {founder.avatar}
+              </div>
+              <h3 className="font-display text-lg font-semibold text-foreground">{founder.name}</h3>
+              <p className="text-sm text-muted-foreground">{founder.role}</p>
+            </motion.div>
           </div>
         </div>
       </section>
