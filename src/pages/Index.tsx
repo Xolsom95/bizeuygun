@@ -42,10 +42,57 @@ const advantages = [
   { icon: CheckCircle, title: "Ücretsiz Kullanım", desc: "Profil oluşturmak tamamen ücretsiz." },
 ];
 
-// Recent profiles from mock data
-const recentProfiles = mockProfiles.slice(0, 6);
+const categoryLabels: Record<string, string> = {
+  "kiralik-ev": "Kiralık",
+  "satilik-ev": "Satılık",
+  "arac": "Araç",
+  "is-ariyorum": "İş",
+};
 
 const Index = () => {
+  const [recentListings, setRecentListings] = useState<any[]>([]);
+  const [loadingRecent, setLoadingRecent] = useState(true);
+  const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      setLoadingRecent(true);
+      const { data: listingsData } = await supabase
+        .from("listings")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(6);
+
+      if (listingsData && listingsData.length > 0) {
+        const userIds = [...new Set(listingsData.map((l) => l.user_id))];
+        const { data: profilesData } = await supabase
+          .from("profiles")
+          .select("user_id, name, age, job, avatar_url")
+          .in("user_id", userIds);
+        const profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+        setRecentListings(listingsData.map((l) => ({ ...l, profile: profileMap.get(l.user_id) || null })));
+      } else {
+        setRecentListings([]);
+      }
+      setLoadingRecent(false);
+    };
+
+    const fetchCounts = async () => {
+      for (const cat of categories) {
+        const { count } = await supabase
+          .from("listings")
+          .select("*", { count: "exact", head: true })
+          .eq("category", cat.key)
+          .eq("is_active", true);
+        setCategoryCounts((prev) => ({ ...prev, [cat.key]: count || 0 }));
+      }
+    };
+
+    fetchRecent();
+    fetchCounts();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
