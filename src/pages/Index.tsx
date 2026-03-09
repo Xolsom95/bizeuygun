@@ -208,7 +208,7 @@ const Index = () => {
                       <p className="mb-3 text-sm text-muted-foreground">{cat.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-accent">
-                          {cat.count.toLocaleString("tr-TR")} profil
+                          {(categoryCounts[cat.key] || 0).toLocaleString("tr-TR")} profil
                         </span>
                         <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-accent" />
                       </div>
