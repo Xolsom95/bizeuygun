@@ -15,10 +15,10 @@ import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
 const categories = [
-  { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", count: 2847 },
-  { title: "Satılık Ev", description: "Alıcı profilleri ve kriterleri", icon: Building2, to: "/ara/satilik-ev", count: 1523 },
-  { title: "Satılık Araç", description: "Araç alıcı talepleri", icon: Car, to: "/ara/arac", count: 3291 },
-  { title: "İş Arayanlar", description: "Profesyonel CV'ler", icon: Briefcase, to: "/ara/is-ariyorum", count: 4120 },
+  { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", key: "kiralik-ev" },
+  { title: "Satılık Ev", description: "Alıcı profilleri ve kriterleri", icon: Building2, to: "/ara/satilik-ev", key: "satilik-ev" },
+  { title: "Satılık Araç", description: "Araç alıcı talepleri", icon: Car, to: "/ara/arac", key: "arac" },
+  { title: "İş Arayanlar", description: "Profesyonel CV'ler", icon: Briefcase, to: "/ara/is-ariyorum", key: "is-ariyorum" },
 ];
 
 const steps = [
