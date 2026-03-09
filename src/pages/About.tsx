@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Target, Lightbulb, Users, Shield, Heart, ArrowRight, Globe, Zap } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import SEO from "@/components/SEO";
 
 const values = [
   { icon: Shield, title: "Güvenlik", desc: "Tüm profiller doğrulanır. Kişisel verileriniz korunur." },
