@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -5,14 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import {
   Home, Building2, Car, ArrowRight, Search, UserCheck, MessageSquare,
   Shield, Users, TrendingUp, Briefcase,
-  CheckCircle, Zap, Globe,
+  CheckCircle, Zap, Globe, Loader2,
 } from "lucide-react";
 import heroIllustration from "@/assets/hero-illustration.png";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
 
 const categories = [
   { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", key: "kiralik-ev" },
