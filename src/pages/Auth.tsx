@@ -63,6 +63,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title={isLogin ? "Giriş Yap" : "Kayıt Ol"} description="BizeUygun hesabınıza giriş yapın veya yeni hesap oluşturun." path="/giris" />
       <Navbar />
 
       <div className="container mx-auto flex min-h-[calc(100vh-200px)] items-center justify-center px-4 py-12">

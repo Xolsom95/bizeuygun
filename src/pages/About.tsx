@@ -18,6 +18,7 @@ const founder = { name: "Mehmet Samet Dalgıç", role: "Kurucu & CEO", avatar: "
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Hakkımızda" description="BizeUygun, geleneksel ilan anlayışını tersine çeviren Türkiye'nin ilk ters ilan platformudur." path="/hakkimizda" />
       <Navbar />
 
       <section className="bg-gradient-hero py-16">

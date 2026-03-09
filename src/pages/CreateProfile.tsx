@@ -140,6 +140,7 @@ const CreateProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="CV Oluştur" description="Profilini oluştur, bütçeni ve kriterlerini belirle. Satıcılar seni bulsun." path="/profil-olustur" />
       <Navbar />
 
       <div className="container mx-auto max-w-3xl px-4 py-8">

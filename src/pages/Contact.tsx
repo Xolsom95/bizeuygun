@@ -35,6 +35,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="İletişim" description="BizeUygun ile iletişime geçin. Sorularınız ve önerileriniz için bize ulaşın." path="/iletisim" />
       <Navbar />
 
       <section className="bg-gradient-hero py-16">

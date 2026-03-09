@@ -95,6 +95,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO />
       <Navbar />
 
       {/* Hero */}

@@ -138,6 +138,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Panelim" description="İlanlarınızı, favorilerinizi ve mesajlarınızı yönetin." path="/panel" />
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">

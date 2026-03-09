@@ -77,6 +77,7 @@ const faqs = [
 const HowItWorks = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Nasıl Çalışır?" description="BizeUygun nasıl çalışır? Arayan CV oluşturur, satıcı onu bulur. Adım adım süreç." path="/nasil-calisir" />
       <Navbar />
 
       {/* Hero */}

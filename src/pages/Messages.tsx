@@ -195,6 +195,7 @@ const Messages = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Mesajlar" description="Mesajlarınızı görüntüleyin ve yanıtlayın." path="/mesajlar" />
       <Navbar />
 
       <div className="container mx-auto px-4 py-6">

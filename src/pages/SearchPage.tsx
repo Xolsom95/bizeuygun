@@ -149,6 +149,7 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title={config.label} description={`${config.label} - ${config.description}`} path={`/ara/${selectedCategory}`} />
       <Navbar />
 
       <section className="bg-primary py-8">
