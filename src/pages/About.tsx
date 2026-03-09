@@ -12,12 +12,7 @@ const values = [
   { icon: Zap, title: "Hız", desc: "Doğru eşleşme saniyeler içinde. Zaman kaybı yok." },
 ];
 
-const team = [
-  { name: "Ahmet Demir", role: "Kurucu & CEO", avatar: "AD" },
-  { name: "Selin Yıldız", role: "CTO", avatar: "SY" },
-  { name: "Murat Kara", role: "Ürün Müdürü", avatar: "MK" },
-  { name: "Zeynep Ak", role: "Pazarlama Direktörü", avatar: "ZA" },
-];
+const founder = { name: "Mehmet Samet Dalgıç", role: "Kurucu & CEO", avatar: "MSD" };
 
 const About = () => {
   return (
