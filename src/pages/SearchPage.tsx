@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 
 const categoryConfig: Record<string, { label: string; icon: typeof Home; description: string }> = {
@@ -148,6 +149,7 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title={config.label} description={`${config.label} - ${config.description}`} path={`/ara/${selectedCategory}`} />
       <Navbar />
 
       <section className="bg-primary py-8">

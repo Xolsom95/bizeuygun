@@ -14,6 +14,7 @@ import { Camera, Save, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import SEO from "@/components/SEO";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -160,6 +161,7 @@ const EditProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Profilimi Düzenle" description="Profil bilgilerinizi güncelleyin." path="/profil-duzenle" />
       <Navbar />
       <div className="container mx-auto max-w-2xl px-4 py-8">
         <motion.div

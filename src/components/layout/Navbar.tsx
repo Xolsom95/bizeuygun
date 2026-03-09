@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, Home, Car, Building2, Briefcase, LogOut, LayoutDashboard, MessageSquare } from "lucide-react";
+import { Menu, X, User, Home, Car, Building2, Briefcase, LogOut, LayoutDashboard, MessageSquare, Heart } from "lucide-react";
 import logo from "@/assets/logo.png";
 import NotificationBell from "@/components/NotificationBell";
 import { motion, AnimatePresence } from "framer-motion";
@@ -93,6 +93,11 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link to="/favoriler" className="flex items-center gap-2">
+                    <Heart className="h-4 w-4" /> Favorilerim
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/mesajlar" className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" /> Mesajlar
                   </Link>
@@ -150,6 +155,11 @@ const Navbar = () => {
                     <Link to="/panel" onClick={() => setMobileOpen(false)}>
                       <Button variant="ghost" className="w-full justify-start gap-2">
                         <LayoutDashboard className="h-4 w-4" /> Panelim
+                      </Button>
+                    </Link>
+                    <Link to="/favoriler" onClick={() => setMobileOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <Heart className="h-4 w-4" /> Favorilerim
                       </Button>
                     </Link>
                     <Link to="/mesajlar" onClick={() => setMobileOpen(false)}>

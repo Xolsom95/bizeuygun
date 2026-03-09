@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import SEO from "@/components/SEO";
 
 const sections = [
   {
@@ -40,6 +41,7 @@ const sections = [
 const Privacy = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Gizlilik Politikası" description="BizeUygun gizlilik politikası. Kişisel verilerinizin nasıl korunduğunu öğrenin." path="/gizlilik" />
       <Navbar />
 
       <section className="bg-gradient-hero py-16">

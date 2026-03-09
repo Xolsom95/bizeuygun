@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Target, Lightbulb, Users, Shield, Heart, ArrowRight, Globe, Zap } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import SEO from "@/components/SEO";
 
 const values = [
   { icon: Shield, title: "Güvenlik", desc: "Tüm profiller doğrulanır. Kişisel verileriniz korunur." },
@@ -17,6 +18,7 @@ const founder = { name: "Mehmet Samet Dalgıç", role: "Kurucu & CEO", avatar: "
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Hakkımızda" description="BizeUygun, geleneksel ilan anlayışını tersine çeviren Türkiye'nin ilk ters ilan platformudur." path="/hakkimizda" />
       <Navbar />
 
       <section className="bg-gradient-hero py-16">

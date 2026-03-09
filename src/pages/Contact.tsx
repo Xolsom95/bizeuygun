@@ -15,6 +15,7 @@ import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import SEO from "@/components/SEO";
 
 const contactInfo = [
   { icon: Mail, label: "E-posta", value: "info@bizeuygun.com" },
@@ -34,6 +35,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="İletişim" description="BizeUygun ile iletişime geçin. Sorularınız ve önerileriniz için bize ulaşın." path="/iletisim" />
       <Navbar />
 
       <section className="bg-gradient-hero py-16">
