@@ -144,6 +144,10 @@ const Index = () => {
               <img
                 src={heroIllustration}
                 alt="BizeUygun ters ilan platformu illüstrasyonu"
+                width={1024}
+                height={1024}
+                fetchPriority="high"
+                decoding="async"
                 className="w-full max-w-lg mx-auto animate-float"
               />
             </motion.div>
