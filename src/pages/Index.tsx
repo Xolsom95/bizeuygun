@@ -95,7 +95,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO />
+      <SEO preloadImage={heroIllustration} />
       <Navbar />
 
       {/* Hero */}

@@ -4,12 +4,14 @@ interface SEOProps {
   title?: string;
   description?: string;
   path?: string;
+  preloadImage?: string;
 }
 
 const SEO = ({
   title = "BizeUygun - Türkiye'nin İlk Ters İlan Platformu",
   description = "Ev, araç veya iş mi arıyorsun? Profilini oluştur, satıcılar seni bulsun. Türkiye'nin ilk ters ilan platformu.",
   path = "",
+  preloadImage,
 }: SEOProps) => {
   const siteUrl = "https://bizeuygun.lovable.app";
   const fullTitle = title.includes("BizeUygun") ? title : `${title} | BizeUygun`;
@@ -19,6 +21,9 @@ const SEO = ({
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={`${siteUrl}${path}`} />
+      {preloadImage && (
+        <link rel="preload" as="image" href={preloadImage} type="image/webp" {...({ fetchpriority: "high" } as any)} />
+      )}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={`${siteUrl}${path}`} />
