@@ -22,7 +22,7 @@ const SEO = ({
       <meta name="description" content={description} />
       <link rel="canonical" href={`${siteUrl}${path}`} />
       {preloadImage && (
-        <link rel="preload" as="image" href={preloadImage} fetchpriority="high" type="image/webp" />
+        <link rel="preload" as="image" href={preloadImage} type="image/webp" {...({ fetchpriority: "high" } as any)} />
       )}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
