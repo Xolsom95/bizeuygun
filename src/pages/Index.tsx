@@ -8,7 +8,7 @@ import {
   Shield, Users, TrendingUp, Briefcase,
   CheckCircle, Zap, Globe, Loader2,
 } from "lucide-react";
-import heroIllustration from "@/assets/hero-illustration.png";
+import heroIllustration from "@/assets/hero-illustration.webp";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SEO from "@/components/SEO";
