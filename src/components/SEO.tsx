@@ -4,12 +4,14 @@ interface SEOProps {
   title?: string;
   description?: string;
   path?: string;
+  preloadImage?: string;
 }
 
 const SEO = ({
   title = "BizeUygun - Türkiye'nin İlk Ters İlan Platformu",
   description = "Ev, araç veya iş mi arıyorsun? Profilini oluştur, satıcılar seni bulsun. Türkiye'nin ilk ters ilan platformu.",
   path = "",
+  preloadImage,
 }: SEOProps) => {
   const siteUrl = "https://bizeuygun.lovable.app";
   const fullTitle = title.includes("BizeUygun") ? title : `${title} | BizeUygun`;
