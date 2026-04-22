@@ -8,7 +8,7 @@ import {
   Shield, Users, TrendingUp, Briefcase,
   CheckCircle, Zap, Globe, Loader2,
 } from "lucide-react";
-import heroIllustration from "@/assets/hero-illustration.png";
+import heroIllustration from "@/assets/hero-illustration.webp";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SEO from "@/components/SEO";
@@ -144,6 +144,10 @@ const Index = () => {
               <img
                 src={heroIllustration}
                 alt="BizeUygun ters ilan platformu illüstrasyonu"
+                width={1024}
+                height={1024}
+                fetchPriority="high"
+                decoding="async"
                 className="w-full max-w-lg mx-auto animate-float"
               />
             </motion.div>
