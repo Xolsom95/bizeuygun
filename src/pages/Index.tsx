@@ -13,6 +13,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const categories = [
   { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", key: "kiralik-ev" },
@@ -50,6 +51,7 @@ const categoryLabels: Record<string, string> = {
 };
 
 const Index = () => {
+  const { user } = useAuth();
   const [recentListings, setRecentListings] = useState<any[]>([]);
   const [loadingRecent, setLoadingRecent] = useState(true);
   const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
@@ -66,11 +68,20 @@ const Index = () => {
 
       if (listingsData && listingsData.length > 0) {
         const userIds = [...new Set(listingsData.map((l) => l.user_id))];
-        const { data: profilesData } = await supabase
-          .from("profiles")
-          .select("user_id, name, age, job, avatar_url")
-          .in("user_id", userIds);
-        const profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+        let profileMap = new Map<string, any>();
+        if (user) {
+          const { data: profilesData } = await supabase
+            .from("profiles")
+            .select("user_id, name, age, job, avatar_url")
+            .in("user_id", userIds);
+          profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+        } else {
+          const { data: publicProfiles } = await supabase
+            .from("profiles_public")
+            .select("user_id, initials, age, job, avatar_url")
+            .in("user_id", userIds);
+          profileMap = new Map((publicProfiles || []).map((p) => [p.user_id, p]));
+        }
         setRecentListings(listingsData.map((l) => ({ ...l, profile: profileMap.get(l.user_id) || null })));
       } else {
         setRecentListings([]);
