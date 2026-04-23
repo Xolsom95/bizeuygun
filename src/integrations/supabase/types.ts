@@ -269,7 +269,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      profiles_public: {
+        Row: {
+          age: number | null
+          avatar_url: string | null
+          city: string | null
+          created_at: string | null
+          district: string | null
+          id: string | null
+          initials: string | null
+          job: string | null
+          user_id: string | null
+        }
+        Insert: {
+          age?: number | null
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string | null
+          district?: string | null
+          id?: string | null
+          initials?: never
+          job?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          age?: number | null
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string | null
+          district?: string | null
+          id?: string | null
+          initials?: never
+          job?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
