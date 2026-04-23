@@ -42,6 +42,9 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-primary-foreground/70">
               <li><Link to="/iletisim" className="hover:text-accent transition-colors">İletişim</Link></li>
               <li><Link to="/gizlilik" className="hover:text-accent transition-colors">Gizlilik Politikası</Link></li>
+              <li><Link to="/kvkk" className="hover:text-accent transition-colors">KVKK</Link></li>
+              <li><Link to="/kullanim-kosullari" className="hover:text-accent transition-colors">Kullanım Koşulları</Link></li>
+              <li><Link to="/cerez-politikasi" className="hover:text-accent transition-colors">Çerez Politikası</Link></li>
               <li><Link to="/giris" className="hover:text-accent transition-colors">Giriş Yap</Link></li>
             </ul>
           </div>

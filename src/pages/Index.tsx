@@ -29,7 +29,7 @@ const steps = [
 
 const stats = [
   { value: "4", label: "Kategori" },
-  { value: "81", label: "Şehir" },
+  { value: "TR", label: "Türkiye Geneli" },
   { value: "%100", label: "Ücretsiz" },
   { value: "7/24", label: "Erişim" },
 ];
@@ -38,7 +38,7 @@ const stats = [
 const advantages = [
   { icon: Zap, title: "Hızlı Eşleşme", desc: "Doğru alıcıyı anında bul. Zaman kaybetme." },
   { icon: Shield, title: "Güvenli Platform", desc: "Kimlik doğrulama ve güvenli mesajlaşma." },
-  { icon: Globe, title: "81 İlde Aktif", desc: "Türkiye'nin her yerinden profiller." },
+  { icon: Globe, title: "Türkiye Geneli", desc: "Her şehirden profil oluşturulabilir." },
   { icon: CheckCircle, title: "Ücretsiz Kullanım", desc: "Profil oluşturmak tamamen ücretsiz." },
 ];
 
@@ -193,7 +193,7 @@ const Index = () => {
             <p className="text-muted-foreground">4 farklı kategoride profilini oluştur, teklifler sana gelsin</p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2 max-w-4xl mx-auto">
             {categories.map((cat, i) => {
               const Icon = cat.icon;
               return (

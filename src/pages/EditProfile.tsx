@@ -59,12 +59,21 @@ const EditProfile = () => {
   useEffect(() => {
     if (!user) return;
     const load = async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("name, age, job, company, education, income, marital_status, children_count, has_pet, pet_type, smoking, has_references, city, district, phone, bio, avatar_url")
-        .eq("user_id", user.id)
-        .single();
-      if (data) setForm(data);
+      const [profileRes, contactRes] = await Promise.all([
+        supabase
+          .from("profiles")
+          .select("name, age, job, company, education, income, marital_status, children_count, has_pet, pet_type, smoking, has_references, city, district, bio, avatar_url")
+          .eq("user_id", user.id)
+          .single(),
+        supabase
+          .from("contacts")
+          .select("phone")
+          .eq("user_id", user.id)
+          .maybeSingle(),
+      ]);
+      if (profileRes.data) {
+        setForm({ ...profileRes.data, phone: contactRes.data?.phone ?? null });
+      }
       setLoadingProfile(false);
     };
     load();
@@ -112,31 +121,35 @@ const EditProfile = () => {
     }
 
     setSaving(true);
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        name: form.name,
-        age: form.age,
-        job: form.job,
-        company: form.company,
-        education: form.education,
-        income: form.income,
-        marital_status: form.marital_status,
-        children_count: form.children_count,
-        has_pet: form.has_pet,
-        pet_type: form.pet_type,
-        smoking: form.smoking,
-        has_references: form.has_references,
-        city: form.city,
-        district: form.district,
-        phone: form.phone,
-        bio: form.bio,
-        avatar_url: form.avatar_url,
-      })
-      .eq("user_id", user.id);
+    const [{ error }, { error: contactError }] = await Promise.all([
+      supabase
+        .from("profiles")
+        .update({
+          name: form.name,
+          age: form.age,
+          job: form.job,
+          company: form.company,
+          education: form.education,
+          income: form.income,
+          marital_status: form.marital_status,
+          children_count: form.children_count,
+          has_pet: form.has_pet,
+          pet_type: form.pet_type,
+          smoking: form.smoking,
+          has_references: form.has_references,
+          city: form.city,
+          district: form.district,
+          bio: form.bio,
+          avatar_url: form.avatar_url,
+        })
+        .eq("user_id", user.id),
+      supabase
+        .from("contacts")
+        .upsert({ user_id: user.id, phone: form.phone }, { onConflict: "user_id" }),
+    ]);
 
     setSaving(false);
-    if (error) {
+    if (error || contactError) {
       toast.error("Profil güncellenemedi");
     } else {
       toast.success("Profil güncellendi!");

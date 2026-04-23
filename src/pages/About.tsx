@@ -130,7 +130,7 @@ const About = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
             {[
-              { value: "81", label: "Şehir" },
+              { value: "TR", label: "Türkiye Geneli" },
               { value: "4", label: "Kategori" },
               { value: "%100", label: "Ücretsiz" },
               { value: "7/24", label: "Erişim" },
