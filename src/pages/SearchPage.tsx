@@ -30,6 +30,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const categoryConfig: Record<string, { label: string; icon: typeof Home; description: string }> = {
   "kiralik-ev": { label: "Kiralık Ev Arayanlar", icon: Home, description: "Kiracı profilleri ve bütçeleri" },
@@ -52,14 +53,15 @@ interface ListingWithProfile {
   moving_date: string | null;
   experience: string | null;
   profile: {
-    name: string;
+    name?: string;
+    initials?: string;
     age: number | null;
     job: string | null;
-    marital_status: string | null;
-    has_children: boolean | null;
-    children_count: number | null;
-    has_pet: boolean | null;
-    pet_type: string | null;
+    marital_status?: string | null;
+    has_children?: boolean | null;
+    children_count?: number | null;
+    has_pet?: boolean | null;
+    pet_type?: string | null;
     avatar_url: string | null;
   } | null;
 }
@@ -69,6 +71,7 @@ interface SearchPageProps {
 }
 
 const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
+  const { user } = useAuth();
   const [searchCity, setSearchCity] = useState("");
   const [searchName, setSearchName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(category);
@@ -112,18 +115,30 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
       if (!error && listingsData) {
         // Fetch profiles for all listing user_ids
         const userIds = [...new Set(listingsData.map((l) => l.user_id))];
-        const { data: profilesData } = userIds.length > 0
-          ? await supabase.from("profiles").select("user_id, name, age, job, marital_status, has_children, children_count, has_pet, pet_type, avatar_url").in("user_id", userIds)
-          : { data: [] };
+        let profileMap = new Map<string, any>();
 
-        const profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+        if (userIds.length > 0) {
+          if (user) {
+            const { data: profilesData } = await supabase
+              .from("profiles")
+              .select("user_id, name, age, job, marital_status, has_children, children_count, has_pet, pet_type, avatar_url")
+              .in("user_id", userIds);
+            profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+          } else {
+            const { data: publicProfiles } = await supabase
+              .from("profiles_public")
+              .select("user_id, initials, age, job, avatar_url")
+              .in("user_id", userIds);
+            profileMap = new Map((publicProfiles || []).map((p) => [p.user_id, p]));
+          }
+        }
 
         let results: ListingWithProfile[] = listingsData.map((l) => ({
           ...l,
           profile: profileMap.get(l.user_id) || null,
         }));
 
-        if (searchName) {
+        if (searchName && user) {
           results = results.filter(
             (l) => l.profile?.name?.toLowerCase().includes(searchName.toLowerCase())
           );
@@ -136,7 +151,7 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
     };
 
     fetchListings();
-  }, [selectedCategory, searchCity, searchName, sortBy, verifiedOnly]);
+  }, [selectedCategory, searchCity, searchName, sortBy, verifiedOnly, user]);
 
 
   const formatBudget = (min: number | null, max: number | null) => {
