@@ -79,6 +79,11 @@ const Auth = () => {
           className="w-full max-w-md"
         >
           <div className="rounded-2xl bg-card p-8 shadow-card">
+            {nextPath !== "/" && (
+              <div className="mb-4 rounded-lg border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-foreground">
+                Profili görüntülemek için giriş yapın.
+              </div>
+            )}
             <div className="mb-6 text-center">
               <h1 className="font-display text-2xl font-bold text-foreground">
                 {isLogin ? "Giriş Yap" : "Kayıt Ol"}
