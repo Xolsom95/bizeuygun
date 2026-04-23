@@ -102,7 +102,7 @@ const Index = () => {
 
     fetchRecent();
     fetchCounts();
-  }, []);
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-background">
