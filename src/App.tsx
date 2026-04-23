@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -20,6 +20,10 @@ import Messages from "./pages/Messages";
 import EditProfile from "./pages/EditProfile";
 import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
+import KVKK from "./pages/KVKK";
+import TermsOfService from "./pages/TermsOfService";
+import CookiePolicy from "./pages/CookiePolicy";
+import CookieConsent from "@/components/CookieConsent";
 
 const queryClient = new QueryClient();
 
@@ -49,8 +53,18 @@ const App = () => (
               <Route path="/profil-duzenle" element={<EditProfile />} />
               <Route path="/mesajlar" element={<Messages />} />
               <Route path="/favoriler" element={<Favorites />} />
+              <Route path="/kvkk" element={<KVKK />} />
+              <Route path="/kullanim-kosullari" element={<TermsOfService />} />
+              <Route path="/cerez-politikasi" element={<CookiePolicy />} />
+              <Route path="/kiralik-ev" element={<Navigate to="/ara/kiralik-ev" replace />} />
+              <Route path="/satilik-ev" element={<Navigate to="/ara/satilik-ev" replace />} />
+              <Route path="/satilik-arac" element={<Navigate to="/ara/arac" replace />} />
+              <Route path="/arac" element={<Navigate to="/ara/arac" replace />} />
+              <Route path="/is-arayanlar" element={<Navigate to="/ara/is-ariyorum" replace />} />
+              <Route path="/is-ariyorum" element={<Navigate to="/ara/is-ariyorum" replace />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <CookieConsent />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
