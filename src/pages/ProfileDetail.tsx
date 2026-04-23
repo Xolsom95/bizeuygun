@@ -204,7 +204,7 @@ const ProfileDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={`${profile.name} - ${categoryLabels[listing.category]} Arıyor`} description={listing.description || `${profile.name} profili - BizeUygun`} path={`/profil/${listing.id}`} />
+      <SEO title={`${profile.name} - ${categoryLabels[listing.category]} Arıyor`} description={listing.description || `${profile.name} profili - BizeUygun`} path={`/profil/${listing.id}`} noindex />
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
