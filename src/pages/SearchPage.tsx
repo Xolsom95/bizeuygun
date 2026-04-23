@@ -195,12 +195,14 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
               onChange={(e) => setSearchCity(e.target.value)}
               className="w-40 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
             />
-            <Input
-              placeholder="İsim ara..."
-              value={searchName}
-              onChange={(e) => setSearchName(e.target.value)}
-              className="w-40 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
-            />
+            {user && (
+              <Input
+                placeholder="İsim ara..."
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+                className="w-40 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
+              />
+            )}
 
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-40 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground">
@@ -245,7 +247,7 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {listings.map((listing, i) => (
-                <ListingCard key={listing.id} listing={listing} index={i} />
+                <ListingCard key={listing.id} listing={listing} index={i} isAuthed={!!user} />
               ))}
             </div>
           )}
