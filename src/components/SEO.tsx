@@ -13,7 +13,7 @@ const SEO = ({
   path = "",
   preloadImage,
 }: SEOProps) => {
-  const siteUrl = "https://bizeuygun.lovable.app";
+  const siteUrl = "https://www.bizeuygun.com";
   const fullTitle = title.includes("BizeUygun") ? title : `${title} | BizeUygun`;
 
   return (
