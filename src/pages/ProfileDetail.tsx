@@ -81,6 +81,13 @@ const ProfileDetail = () => {
   const [isFavorited, setIsFavorited] = useState(false);
 
   useEffect(() => {
+    if (!id) return;
+    if (user === null) {
+      navigate(`/giris?next=${encodeURIComponent(`/profil/${id}`)}`, { replace: true });
+      return;
+    }
+    if (!user) return;
+
     const fetchData = async () => {
       setLoading(true);
       const { data: listingData } = await supabase
@@ -104,21 +111,19 @@ const ProfileDetail = () => {
 
       setProfile(profileData);
 
-      if (user) {
-        const { data: favData } = await supabase
-          .from("favorites")
-          .select("id")
-          .eq("user_id", user.id)
-          .eq("listing_id", listingData.id)
-          .maybeSingle();
-        setIsFavorited(!!favData);
-      }
+      const { data: favData } = await supabase
+        .from("favorites")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("listing_id", listingData.id)
+        .maybeSingle();
+      setIsFavorited(!!favData);
 
       setLoading(false);
     };
 
     fetchData();
-  }, [id, user]);
+  }, [id, user, navigate]);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
