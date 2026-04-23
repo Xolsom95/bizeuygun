@@ -74,19 +74,18 @@ interface ProfileData {
 const ProfileDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorited, setIsFavorited] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
-    if (user === null) {
+    if (!id || authLoading) return;
+    if (!user) {
       navigate(`/giris?next=${encodeURIComponent(`/profil/${id}`)}`, { replace: true });
       return;
     }
-    if (!user) return;
 
     const fetchData = async () => {
       setLoading(true);
@@ -123,7 +122,7 @@ const ProfileDetail = () => {
     };
 
     fetchData();
-  }, [id, user, navigate]);
+  }, [id, user, authLoading, navigate]);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
