@@ -74,13 +74,19 @@ interface ProfileData {
 const ProfileDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorited, setIsFavorited] = useState(false);
 
   useEffect(() => {
+    if (!id || authLoading) return;
+    if (!user) {
+      navigate(`/giris?next=${encodeURIComponent(`/profil/${id}`)}`, { replace: true });
+      return;
+    }
+
     const fetchData = async () => {
       setLoading(true);
       const { data: listingData } = await supabase
@@ -104,21 +110,19 @@ const ProfileDetail = () => {
 
       setProfile(profileData);
 
-      if (user) {
-        const { data: favData } = await supabase
-          .from("favorites")
-          .select("id")
-          .eq("user_id", user.id)
-          .eq("listing_id", listingData.id)
-          .maybeSingle();
-        setIsFavorited(!!favData);
-      }
+      const { data: favData } = await supabase
+        .from("favorites")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("listing_id", listingData.id)
+        .maybeSingle();
+      setIsFavorited(!!favData);
 
       setLoading(false);
     };
 
     fetchData();
-  }, [id, user]);
+  }, [id, user, authLoading, navigate]);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -200,7 +204,7 @@ const ProfileDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={`${profile.name} - ${categoryLabels[listing.category]} Arıyor`} description={listing.description || `${profile.name} profili - BizeUygun`} path={`/profil/${listing.id}`} />
+      <SEO title={`${profile.name} - ${categoryLabels[listing.category]} Arıyor`} description={listing.description || `${profile.name} profili - BizeUygun`} path={`/profil/${listing.id}`} noindex />
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">

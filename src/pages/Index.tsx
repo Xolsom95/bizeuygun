@@ -13,6 +13,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const categories = [
   { title: "Kiralık Ev", description: "Kiracı profilleri ve bütçeleri", icon: Home, to: "/ara/kiralik-ev", key: "kiralik-ev" },
@@ -50,6 +51,7 @@ const categoryLabels: Record<string, string> = {
 };
 
 const Index = () => {
+  const { user } = useAuth();
   const [recentListings, setRecentListings] = useState<any[]>([]);
   const [loadingRecent, setLoadingRecent] = useState(true);
   const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
@@ -66,11 +68,20 @@ const Index = () => {
 
       if (listingsData && listingsData.length > 0) {
         const userIds = [...new Set(listingsData.map((l) => l.user_id))];
-        const { data: profilesData } = await supabase
-          .from("profiles")
-          .select("user_id, name, age, job, avatar_url")
-          .in("user_id", userIds);
-        const profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+        let profileMap = new Map<string, any>();
+        if (user) {
+          const { data: profilesData } = await supabase
+            .from("profiles")
+            .select("user_id, name, age, job, avatar_url")
+            .in("user_id", userIds);
+          profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+        } else {
+          const { data: publicProfiles } = await supabase
+            .from("profiles_public")
+            .select("user_id, initials, age, job, avatar_url")
+            .in("user_id", userIds);
+          profileMap = new Map((publicProfiles || []).map((p) => [p.user_id, p]));
+        }
         setRecentListings(listingsData.map((l) => ({ ...l, profile: profileMap.get(l.user_id) || null })));
       } else {
         setRecentListings([]);
@@ -91,7 +102,7 @@ const Index = () => {
 
     fetchRecent();
     fetchCounts();
-  }, []);
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -330,9 +341,15 @@ const Index = () => {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {recentListings.map((listing, i) => {
                 const profile = listing.profile;
-                const initials = profile?.name
-                  ? profile.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
-                  : "?";
+                const initials = profile?.initials
+                  ? profile.initials
+                  : profile?.name
+                    ? profile.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+                    : "?";
+                const displayName = user ? (profile?.name || "Anonim") : (initials || "Anonim");
+                const linkTo = user
+                  ? `/profil/${listing.id}`
+                  : `/giris?next=${encodeURIComponent(`/profil/${listing.id}`)}`;
                 const formatBudget = (min: number | null, max: number | null) => {
                   if (!min && !max) return "Belirtilmedi";
                   const fmt = (n: number) => n.toLocaleString("tr-TR");
@@ -348,7 +365,7 @@ const Index = () => {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.08 }}
                   >
-                    <Link to={`/profil/${listing.id}`}>
+                    <Link to={linkTo}>
                       <div className="group rounded-2xl bg-background p-5 shadow-card transition-all hover:shadow-card-hover hover:-translate-y-0.5">
                         <div className="mb-3 flex items-center gap-3">
                           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 font-display text-sm font-bold text-accent">
@@ -356,7 +373,7 @@ const Index = () => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-foreground truncate">{profile?.name || "Anonim"}</span>
+                              <span className="font-semibold text-foreground truncate">{displayName}</span>
                               {listing.verified && (
                                 <Badge variant="secondary" className="text-xs bg-success/10 text-success border-0 shrink-0">✓</Badge>
                               )}
@@ -366,9 +383,13 @@ const Index = () => {
                           <Badge variant="outline" className="text-xs shrink-0">{categoryLabels[listing.category] || listing.category}</Badge>
                         </div>
                         <p className="text-sm font-medium text-accent mb-2">{formatBudget(listing.budget_min, listing.budget_max)}</p>
-                        <p className="text-xs text-muted-foreground line-clamp-2">{listing.description}</p>
+                        {user ? (
+                          <p className="text-xs text-muted-foreground line-clamp-2">{listing.description}</p>
+                        ) : (
+                          <p className="text-xs text-muted-foreground italic">Profili görüntülemek için giriş yapın</p>
+                        )}
                         <div className="mt-3 flex items-center justify-end gap-1 text-xs font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
-                          İncele <ArrowRight className="h-3 w-3" />
+                          {user ? "İncele" : "Giriş Yap"} <ArrowRight className="h-3 w-3" />
                         </div>
                       </div>
                     </Link>

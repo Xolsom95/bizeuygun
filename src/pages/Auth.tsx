@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,8 +19,14 @@ const Auth = () => {
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const nextPath = searchParams.get("next") || "/";
+
+  useEffect(() => {
+    if (user) navigate(nextPath, { replace: true });
+  }, [user, nextPath, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +38,7 @@ const Auth = () => {
         toast.error("Giriş başarısız: " + error.message);
       } else {
         toast.success("Hoş geldiniz!");
-        navigate("/");
+        navigate(nextPath, { replace: true });
       }
     } else {
       if (!fullName.trim()) {
@@ -53,7 +59,7 @@ const Auth = () => {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}${nextPath}`,
     });
     if (result.error) {
       toast.error("Google giriş başarısız: " + result.error.message);
@@ -73,6 +79,11 @@ const Auth = () => {
           className="w-full max-w-md"
         >
           <div className="rounded-2xl bg-card p-8 shadow-card">
+            {nextPath !== "/" && (
+              <div className="mb-4 rounded-lg border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-foreground">
+                Profili görüntülemek için giriş yapın.
+              </div>
+            )}
             <div className="mb-6 text-center">
               <h1 className="font-display text-2xl font-bold text-foreground">
                 {isLogin ? "Giriş Yap" : "Kayıt Ol"}

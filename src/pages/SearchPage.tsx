@@ -30,6 +30,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const categoryConfig: Record<string, { label: string; icon: typeof Home; description: string }> = {
   "kiralik-ev": { label: "Kiralık Ev Arayanlar", icon: Home, description: "Kiracı profilleri ve bütçeleri" },
@@ -52,14 +53,15 @@ interface ListingWithProfile {
   moving_date: string | null;
   experience: string | null;
   profile: {
-    name: string;
+    name?: string;
+    initials?: string;
     age: number | null;
     job: string | null;
-    marital_status: string | null;
-    has_children: boolean | null;
-    children_count: number | null;
-    has_pet: boolean | null;
-    pet_type: string | null;
+    marital_status?: string | null;
+    has_children?: boolean | null;
+    children_count?: number | null;
+    has_pet?: boolean | null;
+    pet_type?: string | null;
     avatar_url: string | null;
   } | null;
 }
@@ -69,6 +71,7 @@ interface SearchPageProps {
 }
 
 const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
+  const { user } = useAuth();
   const [searchCity, setSearchCity] = useState("");
   const [searchName, setSearchName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(category);
@@ -112,18 +115,30 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
       if (!error && listingsData) {
         // Fetch profiles for all listing user_ids
         const userIds = [...new Set(listingsData.map((l) => l.user_id))];
-        const { data: profilesData } = userIds.length > 0
-          ? await supabase.from("profiles").select("user_id, name, age, job, marital_status, has_children, children_count, has_pet, pet_type, avatar_url").in("user_id", userIds)
-          : { data: [] };
+        let profileMap = new Map<string, any>();
 
-        const profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+        if (userIds.length > 0) {
+          if (user) {
+            const { data: profilesData } = await supabase
+              .from("profiles")
+              .select("user_id, name, age, job, marital_status, has_children, children_count, has_pet, pet_type, avatar_url")
+              .in("user_id", userIds);
+            profileMap = new Map((profilesData || []).map((p) => [p.user_id, p]));
+          } else {
+            const { data: publicProfiles } = await supabase
+              .from("profiles_public")
+              .select("user_id, initials, age, job, avatar_url")
+              .in("user_id", userIds);
+            profileMap = new Map((publicProfiles || []).map((p) => [p.user_id, p]));
+          }
+        }
 
         let results: ListingWithProfile[] = listingsData.map((l) => ({
           ...l,
           profile: profileMap.get(l.user_id) || null,
         }));
 
-        if (searchName) {
+        if (searchName && user) {
           results = results.filter(
             (l) => l.profile?.name?.toLowerCase().includes(searchName.toLowerCase())
           );
@@ -136,7 +151,7 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
     };
 
     fetchListings();
-  }, [selectedCategory, searchCity, searchName, sortBy, verifiedOnly]);
+  }, [selectedCategory, searchCity, searchName, sortBy, verifiedOnly, user]);
 
 
   const formatBudget = (min: number | null, max: number | null) => {
@@ -180,12 +195,14 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
               onChange={(e) => setSearchCity(e.target.value)}
               className="w-40 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
             />
-            <Input
-              placeholder="İsim ara..."
-              value={searchName}
-              onChange={(e) => setSearchName(e.target.value)}
-              className="w-40 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
-            />
+            {user && (
+              <Input
+                placeholder="İsim ara..."
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+                className="w-40 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
+              />
+            )}
 
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-40 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground">
@@ -230,7 +247,7 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {listings.map((listing, i) => (
-                <ListingCard key={listing.id} listing={listing} index={i} />
+                <ListingCard key={listing.id} listing={listing} index={i} isAuthed={!!user} />
               ))}
             </div>
           )}
@@ -242,11 +259,14 @@ const SearchPage = ({ category = "kiralik-ev" }: SearchPageProps) => {
   );
 };
 
-const ListingCard = ({ listing, index }: { listing: ListingWithProfile; index: number }) => {
+const ListingCard = ({ listing, index, isAuthed }: { listing: ListingWithProfile; index: number; isAuthed: boolean }) => {
   const profile = listing.profile;
-  const initials = profile?.name
-    ? profile.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
-    : "?";
+  const initials = profile?.initials
+    ? profile.initials
+    : profile?.name
+      ? profile.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+      : "?";
+  const displayName = isAuthed ? (profile?.name || "Anonim") : (initials || "Anonim");
 
   const formatBudget = (min: number | null, max: number | null) => {
     if (!min && !max) return "Belirtilmedi";
@@ -266,13 +286,17 @@ const ListingCard = ({ listing, index }: { listing: ListingWithProfile; index: n
     return `${days} gün önce`;
   })();
 
+  const linkTo = isAuthed
+    ? `/profil/${listing.id}`
+    : `/giris?next=${encodeURIComponent(`/profil/${listing.id}`)}`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
     >
-      <Link to={`/profil/${listing.id}`}>
+      <Link to={linkTo}>
         <div className="group rounded-2xl bg-card p-6 shadow-card transition-all hover:shadow-card-hover hover:-translate-y-0.5">
           <div className="mb-4 flex items-start justify-between">
             <div className="flex items-center gap-3">
@@ -281,7 +305,7 @@ const ListingCard = ({ listing, index }: { listing: ListingWithProfile; index: n
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-foreground">{profile?.name || "Anonim"}</span>
+                  <span className="font-semibold text-foreground">{displayName}</span>
                   {listing.verified && (
                     <Badge variant="secondary" className="text-xs bg-success/10 text-success border-0">✓</Badge>
                   )}
@@ -309,7 +333,7 @@ const ListingCard = ({ listing, index }: { listing: ListingWithProfile; index: n
               <Wallet className="h-3.5 w-3.5 shrink-0" />
               <span className="truncate font-medium text-accent">{formatBudget(listing.budget_min, listing.budget_max)}</span>
             </div>
-            {profile?.marital_status && (
+            {isAuthed && profile?.marital_status && (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Heart className="h-3.5 w-3.5 shrink-0" />
                 <span>{profile.marital_status}</span>
@@ -317,18 +341,20 @@ const ListingCard = ({ listing, index }: { listing: ListingWithProfile; index: n
             )}
           </div>
 
-          <div className="mb-3 flex gap-2">
-            {profile?.has_children && (
-              <div className="flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
-                <Baby className="h-3 w-3" /> Çocuklu
-              </div>
-            )}
-            {profile?.has_pet && (
-              <div className="flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
-                <Dog className="h-3 w-3" /> {profile.pet_type || "Evcil Hayvan"}
-              </div>
-            )}
-          </div>
+          {isAuthed && (
+            <div className="mb-3 flex gap-2">
+              {profile?.has_children && (
+                <div className="flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
+                  <Baby className="h-3 w-3" /> Çocuklu
+                </div>
+              )}
+              {profile?.has_pet && (
+                <div className="flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
+                  <Dog className="h-3 w-3" /> {profile.pet_type || "Evcil Hayvan"}
+                </div>
+              )}
+            </div>
+          )}
 
           {listing.preferences && listing.preferences.length > 0 && (
             <div className="mb-3 flex flex-wrap gap-1.5">
@@ -341,12 +367,15 @@ const ListingCard = ({ listing, index }: { listing: ListingWithProfile; index: n
             </div>
           )}
 
-          {listing.description && (
+          {isAuthed && listing.description && (
             <p className="text-sm text-muted-foreground line-clamp-2">{listing.description}</p>
+          )}
+          {!isAuthed && (
+            <p className="text-xs text-muted-foreground italic">Detayları görmek için giriş yapın</p>
           )}
 
           <div className="mt-4 flex items-center justify-end gap-1 text-sm font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
-            Profili İncele <ArrowRight className="h-4 w-4" />
+            {isAuthed ? "Profili İncele" : "Giriş Yap ve Gör"} <ArrowRight className="h-4 w-4" />
           </div>
         </div>
       </Link>
